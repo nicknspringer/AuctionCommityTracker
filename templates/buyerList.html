@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Buyer List</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Buyer List</h1>
+    <form actions="buyerList" method="POST">
+        <input type="text" name="Name" placeholder="Buyer Name">
+        <input type="text" name="Phone" placeholder="Buyer Phone Number">
+        <input type="text" name="Address" placeholder="Buyer Address">
+        <input type="submit" value="Add Buyer">
+    </form>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+        {% for buyer in buyers %}
+        <tr>
+            <td>{{ buyer.name }}</td>
+            <td>{{ buyer.phone }}</td>
+            <td>{{ buyer.address }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
