@@ -10,12 +10,13 @@ db = SQLAlchemy(app)
 
 class Buyer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
+    fName = db.Column(db.String(80), nullable=False)
+    lName = db.Column(db.String(80), nullable=False)
     phone = db.Column(db.String(120), nullable=True)
     address = db.Column(db.String(256), nullable=False)
 
     def __repr__(self):
-        return f"<Buyer {self.name}>"
+        return f"<Buyer {self.fName}>"
     
 class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,18 +27,19 @@ class Club(db.Model):
 
 class Exhibitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
+    fName = db.Column(db.String(80), nullable=False)
+    lName = db.Column(db.String(80), nullable=False)
     address = db.Column(db.String(256), nullable=False)
     club_id = db.Column(db.Integer, db.ForeignKey("club.id"), nullable=False)
 
     club = db.relationship("Club", backref=db.backref("exhibitors", lazy=True))
 
     def __repr__(self):
-        return f"<Exhibitor {self.name}>"
+        return f"<Exhibitor {self.fName}>"
     
 class Animal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ear_tag_number = db.Column(db.Integer, unique=True, nullable=False)
+    ear_tag_number = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(80), nullable=False)
     species = db.Column(db.String(80), nullable=False)
     weight = db.Column(db.Float, nullable=False)
@@ -56,15 +58,13 @@ class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"), nullable=False)
     buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
-    exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
     sale_price = db.Column(db.Float, nullable=False)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
     buyer = db.relationship("Buyer", backref=db.backref("purchases", lazy=True))
-    exhibitor = db.relationship("Exhibitor", backref=db.backref("sales", lazy=True))
 
     def __repr__(self):
-        return f"<Sale {self.animal.name} to {self.buyer.name} for ${self.sale_price}/lb>"
+        return f"<Sale {self.animal.name} to {self.buyer.fName} for ${self.sale_price}/lb>"
     
 class Addon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,7 +76,7 @@ class Addon(db.Model):
     exhibitor = db.relationship("Exhibitor", backref=db.backref("addons", lazy=True))
 
     def __repr__(self):
-        return f"<Addon {self.name}>"
+        return f"<Addon {self.price}>"
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -86,10 +86,11 @@ def main():
 @app.route("/buyerList", methods=["GET", "POST"])
 def buyer_list():
     if request.method == "POST":
-        name = request.form["Name"]
+        fName = request.form["fName"]
+        lName = request.form["lName"]
         phone = request.form["Phone"]
         address = request.form["Address"]
-        buyer = Buyer(name=name, phone=phone, address=address)
+        buyer = Buyer(fName=fName, lName=lName, phone=phone, address=address)
         try:
             db.session.add(buyer)
             db.session.commit()
@@ -99,7 +100,7 @@ def buyer_list():
             print(f"Error adding buyer: {e}")
             return f"ERROR: {e}"
     else:
-        buyers = Buyer.query.order_by(Buyer.name).all()
+        buyers = Buyer.query.order_by(Buyer.fName).all()
         return render_template("buyerList.html", buyers=buyers)
 
 @app.route("/clubList", methods=["GET", "POST"])
@@ -118,6 +119,94 @@ def club_list():
     else:
         clubs = Club.query.order_by(Club.name).all()
         return render_template("clubList.html", clubs=clubs)
+
+@app.route("/exhibitorList", methods=["GET", "POST"])
+def exhibitor_list():
+    if request.method == "POST":
+        fName = request.form["fName"]
+        lName = request.form["lName"]
+        address = request.form["Address"]
+        club_id = request.form["club_id"]
+        exhibitor = Exhibitor(fName=fName, lName=lName, address=address, club_id=club_id)
+        try:
+            db.session.add(exhibitor)
+            db.session.commit()
+            return redirect("/exhibitorList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding exhibitor: {e}")
+            return f"ERROR: {e}"
+    else:
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        clubs = Club.query.order_by(Club.name).all()
+        return render_template("exhibitorList.html", exhibitors=exhibitors, clubs=clubs)
+
+@app.route("/animalList", methods=["GET", "POST"])
+def animal_list():
+    if request.method == "POST":
+        ear_tag_number = request.form["Ear_Tag_No"]
+        name = request.form["Name"]
+        species = request.form["Species"]
+        weight = request.form["Weight"]
+        exhibitor_id = request.form["exhibitor_id"]
+        packer = request.form["Packer"]
+        kill_plant = request.form["Kill_Plant"]
+        animal = Animal(ear_tag_number=ear_tag_number, name=name, species=species, weight=weight, exhibitor_id=exhibitor_id, packer=packer, kill_plant=kill_plant)
+        try:
+            db.session.add(animal)
+            db.session.commit()
+            return redirect("/animalList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding animal: {e}")
+            return f"ERROR: {e}"
+    else:
+        animals = Animal.query.order_by(Animal.ear_tag_number).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("animalList.html", animals=animals, exhibitors=exhibitors)
+
+@app.route("/saleList", methods=["GET", "POST"])
+def sale_list():
+    if request.method == "POST":
+        animal_id = request.form["animal_id"]
+        buyer_id = request.form["buyer_id"]
+        sale_price = request.form["price"]
+        sale = Sale(animal_id=animal_id, buyer_id=buyer_id, sale_price=sale_price)
+        try:
+            db.session.add(sale)
+            db.session.commit()
+            return redirect("/saleList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding sale: {e}")
+            return f"ERROR: {e}"
+    else:
+        sales = Sale.query.order_by(Sale.id).all()
+        animals = Animal.query.order_by(Animal.ear_tag_number).all()
+        buyers = Buyer.query.order_by(Buyer.fName).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
+
+@app.route("/addonList", methods=["GET", "POST"])
+def addon_list():
+    if request.method == "POST":
+        buyer_id = request.form["buyer_id"]
+        exhibitor_id = request.form["exhibitor_id"]
+        price = request.form["Price"]
+        addon = Addon(buyer_id=buyer_id, exhibitor_id=exhibitor_id, price=price)
+        try:
+            db.session.add(addon)
+            db.session.commit()
+            return redirect("/addonList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding addon: {e}")
+            return f"ERROR: {e}"
+    else:
+        addons = Addon.query.order_by(Addon.id).all()
+        buyers = Buyer.query.order_by(Buyer.fName).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("addonList.html", addons=addons, buyers=buyers, exhibitors=exhibitors)
 
 if __name__ == "__main__":
     with app.app_context():

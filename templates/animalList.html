@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Animal List</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Animal List</h1>
+    <form actions="animalList" method="POST">
+        <select name="exhibitor_id">
+            {% for exhibitor in exhibitors %}
+            <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="Ear_Tag_No" placeholder="Animal Ear Tag Number">
+        <input type="text" name="Name" placeholder="Animal Name" required>
+        <input type="text" name="Species" placeholder="Animal Species" required>
+        <input type="number" name="Weight" placeholder="Animal Weight (lbs)" required>
+        <input type="text" name="Packer" placeholder="Packer Name">
+        <input type="text" name="Kill_Plant" placeholder="Kill Plant Name">
+        <input type="submit" value="Add Animal">
+    </form>
+    <table>
+        <tr>
+            <th>Exhibitor</th>
+            <th>Name</th>
+            <th>Ear Tag Number</th>
+            <th>Species</th>
+            <th>Weight</th>
+            <th>Packer</th>
+            <th>Kill Plant</th>
+        </tr>
+        {% for animal in animals %}
+        <tr>
+            <td>{{ animal.exhibitor.fName }} {{ animal.exhibitor.lName }}</td>
+            <td>{{ animal.name }}</td>
+            <td>{{ animal.ear_tag_number }}</td>
+            <td>{{ animal.species }}</td>
+            <td>{{ animal.weight }}</td>
+            <td>{{ animal.packer }}</td>
+            <td>{{ animal.kill_plant }}</td>
+        </tr>
+        {% endfor %}
+    </table>  
+{% endblock %}

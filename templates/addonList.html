@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Add-on List</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Add-on List</h1>
+    <form actions="addonList" method="POST">
+        <select name="buyer_id">
+            <option value="" disabled selected>Select a buyer</option>
+            {% for buyer in buyers %}
+            <option value="{{ buyer.id }}">{{ buyer.fName }} {{ buyer.lName }}</option>
+            {% endfor %}
+        </select>
+        <select name="exhibitor_id">
+            <option value="" disabled selected>Select an exhibitor</option>
+            {% for exhibitor in exhibitors %}
+            <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" step="0.01" name="Price" placeholder="Add-on Price ($)" required>
+        <input type="submit" value="Add Add-on">
+    </form>
+    <table>
+        <tr>
+            <th>Buyer</th>
+            <th>Exhibitor</th>
+            <th>Price</th>
+        </tr>
+        {% for addon in addons %}
+        <tr>
+            <td>{{ addon.buyer.fName }} {{ addon.buyer.lName }}</td>
+            <td>{{ addon.exhibitor.fName }} {{ addon.exhibitor.lName }}</td>
+            <td>${{ addon.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+    

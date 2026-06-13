@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Exhibitor List</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Exhibitor List</h1>
+    <form actions="exhibitorList" method="POST">
+        <input type="text" name="fName" placeholder="First Name" required>
+        <input type="text" name="lName" placeholder="Last Name" required>
+        <input type="text" name="Phone" placeholder="Exhibitor Phone Number">
+        <input type="text" name="Address" placeholder="Exhibitor Address" required>
+        <select name="club_id">
+            <option value="" disabled selected>Select a club</option>
+            {% for club in clubs %}
+            <option value="{{ club.id }}">{{ club.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Add Exhibitor">
+    </form>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Club</th>
+        </tr>
+        {% for exhibitor in exhibitors %}
+        <tr>
+            <td>{{ exhibitor.fName }}</td>
+            <td>{{ exhibitor.lName }}</td>
+            <td>{{ exhibitor.phone }}</td>
+            <td>{{ exhibitor.address }}</td>
+            <td>{{ exhibitor.club.name }}</td>
+        </tr>
+        {% endfor %}
+    </table>  
+{% endblock %}
