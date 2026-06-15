@@ -308,7 +308,7 @@ def edit_addon(addon_id):
     if request.method == "POST":
         addon.buyer_id = request.form["buyer_id"]
         addon.exhibitor_id = request.form["exhibitor_id"]
-        addon.price = request.form["price"]
+        addon.price = request.form["Price"]
         try:
             db.session.commit()
             return redirect("/addonList")
