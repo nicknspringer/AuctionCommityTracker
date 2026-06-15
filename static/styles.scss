@@ -1,3 +1,123 @@
-body{
-    background-color: wheat;
+// Color Variables
+$background-color: wheat;
+$foreground-color: #fff;
+$primary-color: #007bff;
+$primary-color-hover: darken($primary-color, 10%);
+$title-color: #333;
+$table-header-color: #666;
+
+body
+{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: $background-color;
+}
+
+.nav
+{
+    background-color: $foreground-color;
+    margin: 0;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+
+.content
+{
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: $foreground-color;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    .hi1
+    {
+        color: $title-color;
+        margin-bottom: 20px;
+    }
+
+    table
+    {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+
+        th, td
+        {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th
+        {
+            background-color: $table-header-color;
+            color: $foreground-color;
+        }
+
+        tr:nth-child(even)
+        {
+            background-color: #f9f9f9;
+        }
+    }
+
+    a {
+        display: inline-block;
+        margin: 10px;
+        padding: 8px 20px;
+        background-color: $primary-color;
+        color: #FFF;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+
+        &:hover
+        {
+            background-color: $primary-color-hover;
+        }
+    }
+
+    input[type="text"]
+    {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    input[type="number"]
+    {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    select
+    {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    input[type="submit"]
+    {
+        padding: 8px 20px;
+        background-color: $primary-color;
+        color: #FFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover
+        {
+            background-color: $primary-color-hover;
+        }
+    }
 }
