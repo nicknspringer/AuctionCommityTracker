@@ -7,10 +7,13 @@
 {% block body %}
     <h1>Sale List</h1>
     <form actions="saleList" method="POST">
-        <select name="animal_id" required>
+        <select name="animal_id" autofocus required>
             <option value="" disabled selected>Select an animal</option>
             {% for animal in animals %}
-            <option value="{{ animal.id }}">{{ animal.name }} {{animal.ear_tag_number}} {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
+            <option value="{{ animal.id }}">{{ animal.name }}</option>
+            <option disabled>Ear Tag Number: {{ animal.ear_tag_number }}</option>
+            <option disabled>Exhibitor: {{ animal.exhibitor.fName }} {{ animal.exhibitor.lName }}</option>
+            <hr>
             {% endfor %}
         </select>
         <select name="buyer_id" required>
@@ -20,6 +23,7 @@
             {% endfor %}
         </select>
         <input type="number" step="0.01" name="price" placeholder="Sale Price" required>
+        <br>
         <input type="submit" value="Add Sale">
     </form>
     <table>
@@ -31,6 +35,7 @@
             <th>Price Per Pound</th>
             <th>Animal Weight</th>
             <th>Sale Price</th>
+            <th>Actions</th>
         </tr>
         {% for sale in sales %}
         <tr>
@@ -41,6 +46,9 @@
             <td>{{ sale.sale_price }}</td>
             <td>{{ sale.animal.weight }}</td>
             <td>{{ sale.sale_price * sale.animal.weight }}</td>
+            <td>
+                <a href="/saleList/delete/{{ sale.id }}" onclick="return confirm('Are you sure you want to delete this sale?')">Delete</a>    
+            </td>
         </tr>
         {% endfor %}
     </table>

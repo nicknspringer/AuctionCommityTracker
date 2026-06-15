@@ -7,10 +7,11 @@
 {% block body %}
     <h1>Buyer List</h1>
     <form actions="buyerList" method="POST">
-        <input type="text" name="fName" placeholder="First Name" required>
+        <input type="text" name="fName" placeholder="First Name" autofocus required>
         <input type="text" name="lName" placeholder="Last Name" required>
         <input type="text" name="Phone" placeholder="Buyer Phone Number">
         <input type="text" name="Address" placeholder="Buyer Address" required>
+        <br>
         <input type="submit" value="Add Buyer">
     </form>
     <table>
@@ -19,6 +20,7 @@
             <th>Last Name</th>
             <th>Phone</th>
             <th>Address</th>
+            <th>Actions</th>
         </tr>
         {% for buyer in buyers %}
         <tr>
@@ -26,6 +28,9 @@
             <td>{{ buyer.lName }}</td>
             <td>{{ buyer.phone }}</td>
             <td>{{ buyer.address }}</td>
+            <td>
+                <a href="/buyerList/delete/{{ buyer.id }}" onclick="return confirm('Are you sure you want to delete this buyer?')">Delete</a>    
+            </td>
         </tr>
         {% endfor %}
     </table>

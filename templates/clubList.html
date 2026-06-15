@@ -7,7 +7,8 @@
 {% block body %}
     <h1>Club List</h1>
     <form actions="clubList" method="POST">
-        <input type="text" name="Name" placeholder="Club Name" required>
+        <input type="text" name="Name" placeholder="Club Name" autofocus required>
+        <br>
         <input type="submit" value="Add Club">
     </form>
     <table>
@@ -17,6 +18,9 @@
         {% for club in clubs %}
         <tr>
             <td>{{ club.name }}</td>
+            <td>
+                <a href="/clubList/delete/{{ club.id }}" onclick="return confirm('Are you sure you want to delete this club?')">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </table>  

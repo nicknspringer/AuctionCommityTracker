@@ -7,7 +7,8 @@
 {% block body %}
     <h1>Animal List</h1>
     <form actions="animalList" method="POST">
-        <select name="exhibitor_id">
+        <select name="exhibitor_id" autofocus required>
+            <option value="" disabled selected>Select an exhibitor</option>
             {% for exhibitor in exhibitors %}
             <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
             {% endfor %}
@@ -18,6 +19,7 @@
         <input type="number" name="Weight" placeholder="Animal Weight (lbs)" required>
         <input type="text" name="Packer" placeholder="Packer Name">
         <input type="text" name="Kill_Plant" placeholder="Kill Plant Name">
+        <br>
         <input type="submit" value="Add Animal">
     </form>
     <table>
@@ -39,6 +41,9 @@
             <td>{{ animal.weight }}</td>
             <td>{{ animal.packer }}</td>
             <td>{{ animal.kill_plant }}</td>
+            <td>
+                <a href="/animalList/delete/{{ animal.id }}" onclick="return confirm('Are you sure you want to delete this animal?')">Delete</a>    
+            </td>
         </tr>
         {% endfor %}
     </table>  

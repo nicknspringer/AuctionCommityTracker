@@ -30,7 +30,7 @@ class Exhibitor(db.Model):
     fName = db.Column(db.String(80), nullable=False)
     lName = db.Column(db.String(80), nullable=False)
     address = db.Column(db.String(256), nullable=False)
-    club_id = db.Column(db.Integer, db.ForeignKey("club.id"), nullable=False)
+    club_id = db.Column(db.Integer, db.ForeignKey("club.id"))
 
     club = db.relationship("Club", backref=db.backref("exhibitors", lazy=True))
 
@@ -46,9 +46,8 @@ class Animal(db.Model):
     picture = db.Column(db.LargeBinary, nullable=True)
     packer = db.Column(db.String(80), nullable=True)
     kill_plant = db.Column(db.String(80), nullable=True)
-    exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
+    exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"))
     
-
     exhibitor = db.relationship("Exhibitor", backref=db.backref("animals", lazy=True))
 
     def __repr__(self):
@@ -56,8 +55,8 @@ class Animal(db.Model):
     
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"), nullable=False)
-    buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"))
+    buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"))
     sale_price = db.Column(db.Float, nullable=False)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
@@ -68,8 +67,8 @@ class Sale(db.Model):
     
 class Addon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
-    exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
+    buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"))
+    exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"))
     price = db.Column(db.Float, nullable=False)
 
     buyer = db.relationship("Buyer", backref=db.backref("addons", lazy=True))
@@ -79,10 +78,14 @@ class Addon(db.Model):
         return f"<Addon {self.price}>"
 
 
+# Home page
+# Displays links to other main pages: Buyers, Clubs, Exhibitors, Animals, Sales, Add-ons
 @app.route("/", methods=["GET", "POST"])
 def main():    
     return render_template("index.html")
 
+#buyers page
+# Displays list of buyers and form to add new buyer
 @app.route("/buyerList", methods=["GET", "POST"])
 def buyer_list():
     if request.method == "POST":
@@ -103,6 +106,51 @@ def buyer_list():
         buyers = Buyer.query.order_by(Buyer.fName).all()
         return render_template("buyerList.html", buyers=buyers)
 
+@app.route("/<page>/delete/<int:id>", methods=["POST", "GET"])
+def delete_buyer(page, id):
+    if page == "buyerList":
+        buyer = Buyer.query.get_or_404(id)
+    elif page == "addonList":
+        buyer = Addon.query.get_or_404(id)
+    elif page == "saleList":
+        buyer = Sale.query.get_or_404(id)
+    elif page == "animalList":
+        buyer = Animal.query.get_or_404(id)
+    elif page == "exhibitorList":
+        buyer = Exhibitor.query.get_or_404(id)
+    elif page == "clubList":
+        buyer = Club.query.get_or_404(id)
+    else:
+        return "Invalid page"
+    try:
+        db.session.delete(buyer)
+        db.session.commit()
+        return redirect(f"/{page}")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error deleting item from database: {e}")
+        return f"ERROR: {e}"
+
+@app.route("/buyerList/edit/<int:buyer_id>", methods=["GET", "POST"])
+def edit_buyer(buyer_id):
+    buyer = Buyer.query.get_or_404(buyer_id)
+    if request.method == "POST":
+        buyer.fName = request.form["fName"]
+        buyer.lName = request.form["lName"]
+        buyer.phone = request.form["Phone"]
+        buyer.address = request.form["Address"]
+        try:
+            db.session.commit()
+            return redirect("/buyerList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating buyer: {e}")
+            return f"ERROR: {e}"
+    else:
+        return render_template("editBuyer.html", buyer=buyer)
+
+#clubs page
+# Displays list of clubs and form to add new club
 @app.route("/clubList", methods=["GET", "POST"])
 def club_list():
     if request.method == "POST":
@@ -120,6 +168,8 @@ def club_list():
         clubs = Club.query.order_by(Club.name).all()
         return render_template("clubList.html", clubs=clubs)
 
+#exhibitors page
+# Displays list of exhibitors and form to add new exhibitor
 @app.route("/exhibitorList", methods=["GET", "POST"])
 def exhibitor_list():
     if request.method == "POST":
@@ -141,6 +191,8 @@ def exhibitor_list():
         clubs = Club.query.order_by(Club.name).all()
         return render_template("exhibitorList.html", exhibitors=exhibitors, clubs=clubs)
 
+#animals page
+# Displays list of animals and form to add new animal
 @app.route("/animalList", methods=["GET", "POST"])
 def animal_list():
     if request.method == "POST":
@@ -165,6 +217,8 @@ def animal_list():
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("animalList.html", animals=animals, exhibitors=exhibitors)
 
+#sales page
+# Displays list of sales and form to add new sale
 @app.route("/saleList", methods=["GET", "POST"])
 def sale_list():
     if request.method == "POST":
@@ -187,6 +241,8 @@ def sale_list():
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
+#addons page
+# Displays list of add-ons and form to add new add-on
 @app.route("/addonList", methods=["GET", "POST"])
 def addon_list():
     if request.method == "POST":
