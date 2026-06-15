@@ -10,7 +10,10 @@
         <select name="animal_id" required>
             <option value="" disabled selected>Select an animal</option>
             {% for animal in animals %}
-            <option value="{{ animal.id }}">{{ animal.name }} {{animal.ear_tag_number}} {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
+            <option value="{{ animal.id }}">Ear tag: {{animal.ear_tag_number}}</option>
+            <option disabled>{{ animal.species }}</option>
+            <option disabled>Exhibitor: {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
+            <hr>
             {% endfor %}
         </select>
         <select name="buyer_id" required>
@@ -31,6 +34,7 @@
             <th>Price Per Pound</th>
             <th>Animal Weight</th>
             <th>Sale Price</th>
+            <th>Actions</th>
         </tr>
         {% for sale in sales %}
         <tr>
@@ -41,6 +45,9 @@
             <td>{{ sale.sale_price }}</td>
             <td>{{ sale.animal.weight }}</td>
             <td>{{ sale.sale_price * sale.animal.weight }}</td>
+            <td>
+                <a href="/saleList/edit/{{ sale.id }}">Edit</a> 
+            </td>
         </tr>
         {% endfor %}
     </table>

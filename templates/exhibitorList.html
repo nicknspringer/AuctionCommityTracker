@@ -26,6 +26,7 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Club</th>
+            <th>Actions</th>
         </tr>
         {% for exhibitor in exhibitors %}
         <tr>
@@ -34,6 +35,9 @@
             <td>{{ exhibitor.phone }}</td>
             <td>{{ exhibitor.address }}</td>
             <td>{{ exhibitor.club.name }}</td>
+            <td>
+                <a href="/exhibitorList/edit/{{ exhibitor.id }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>  

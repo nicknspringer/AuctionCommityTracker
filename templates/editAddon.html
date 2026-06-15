@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Edit Addon</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Edit Addon</h1>
+    <form actions="addonList" method="POST">
+        <label for="buyer_id">Buyer:</label>
+        <select name="buyer_id">
+            <option value="" disabled>Select a buyer</option>
+            {% for buyer in buyers %}
+            <option value="{{ buyer.id }}">{{ buyer.fName }} {{ buyer.lName }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="exhibitor_id">Exhibitor:</label>
+        <select name="exhibitor_id">
+            <option value="" disabled>Select an exhibitor</option>
+            {% for exhibitor in exhibitors %}
+            <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="Price">Add-on Price ($):</label>
+        <input type="number" step="0.01" name="Price" value="{{ addon.price }}" required>
+        <input type="submit" value="Update Add-on">
+    </form>
+{% endblock %}

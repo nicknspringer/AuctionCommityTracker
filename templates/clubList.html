@@ -13,10 +13,14 @@
     <table>
         <tr>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
         {% for club in clubs %}
         <tr>
             <td>{{ club.name }}</td>
+            <td>
+                <a href="/clubList/edit/{{ club.id }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>  

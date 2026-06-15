@@ -27,12 +27,16 @@
             <th>Buyer</th>
             <th>Exhibitor</th>
             <th>Price</th>
+            <th>Actions</th>
         </tr>
         {% for addon in addons %}
         <tr>
             <td>{{ addon.buyer.fName }} {{ addon.buyer.lName }}</td>
             <td>{{ addon.exhibitor.fName }} {{ addon.exhibitor.lName }}</td>
             <td>${{ addon.price }}</td>
+            <td>
+                <a href="{{ url_for('edit_addon', addon_id=addon.id) }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>

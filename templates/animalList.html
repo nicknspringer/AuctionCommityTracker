@@ -29,6 +29,7 @@
             <th>Weight</th>
             <th>Packer</th>
             <th>Kill Plant</th>
+            <th>Actions</th>
         </tr>
         {% for animal in animals %}
         <tr>
@@ -39,6 +40,9 @@
             <td>{{ animal.weight }}</td>
             <td>{{ animal.packer }}</td>
             <td>{{ animal.kill_plant }}</td>
+            <td>
+                <a href="/animalList/edit/{{ animal.id }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>  

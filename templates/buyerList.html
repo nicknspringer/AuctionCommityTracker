@@ -19,6 +19,7 @@
             <th>Last Name</th>
             <th>Phone</th>
             <th>Address</th>
+            <th>Actions</th>
         </tr>
         {% for buyer in buyers %}
         <tr>
@@ -26,6 +27,9 @@
             <td>{{ buyer.lName }}</td>
             <td>{{ buyer.phone }}</td>
             <td>{{ buyer.address }}</td>
+            <td>
+                <a href="/buyerList/edit/{{ buyer.id }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
