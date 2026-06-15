@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Edit Animal</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Edit Animal</h1>
+    <form action="/animalList/edit/{{ animal.id }}" method="POST">
+        <label for="Ear_Tag_No">Ear Tag Number:</label>
+        <input type="text" name="Ear_Tag_No" placeholder="Ear Tag Number" value="{{ animal.ear_tag_number }}" required>
+        <br>
+        <label for="name">Name:</label>
+        <input type="text" name="name" placeholder="Name" value="{{ animal.name }}" required>
+        <br>
+        <label for="species">Species:</label>
+        <input type="text" name="species" placeholder="Species" value="{{ animal.species }}" required>
+        <br>
+        <label for="weight">Weight:</label>
+        <input type="number" name="weight" placeholder="Weight" value="{{ animal.weight }}" required>
+        <br>
+        <label for="exhibitor_id">Exhibitor:</label>
+        <select name="exhibitor_id">
+            {% for exhibitor in exhibitors %}
+                <option value="{{ exhibitor.id }}" {% if exhibitor.id == animal.exhibitor_id %}selected{% endif %}>
+                    {{ exhibitor.fName }} {{ exhibitor.lName }}
+                </option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="packer">Packer:</label>
+        <input type="text" name="packer" placeholder="Packer" value="{{ animal.packer }}">
+        <br>
+        <label for="kill_plant">Kill Plant:</label>
+        <input type="text" name="kill_plant" placeholder="Kill Plant" value="{{ animal.kill_plant }}">
+        <br>
+        <input type="submit" value="Update Animal">
+    </form>
+{% endblock %}

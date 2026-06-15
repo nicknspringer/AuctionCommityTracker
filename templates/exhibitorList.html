@@ -7,16 +7,26 @@
 {% block body %}
     <h1>Exhibitor List</h1>
     <form actions="exhibitorList" method="POST">
+        <label for="fName">First Name:</label>
         <input type="text" name="fName" placeholder="First Name" required>
+        <br>
+        <label for="lName">Last Name:</label>
         <input type="text" name="lName" placeholder="Last Name" required>
+        <br>
+        <label for="Phone">Phone Number:</label>
         <input type="text" name="Phone" placeholder="Exhibitor Phone Number">
+        <br>
+        <label for="Address">Address:</label>
         <input type="text" name="Address" placeholder="Exhibitor Address" required>
+        <br>
+        <label for="club_id">Club:</label>
         <select name="club_id">
             <option value="" disabled selected>Select a club</option>
             {% for club in clubs %}
             <option value="{{ club.id }}">{{ club.name }}</option>
             {% endfor %}
         </select>
+        <br>
         <input type="submit" value="Add Exhibitor">
     </form>
     <table>
@@ -26,6 +36,7 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Club</th>
+            <th>Actions</th>
         </tr>
         {% for exhibitor in exhibitors %}
         <tr>
@@ -34,6 +45,9 @@
             <td>{{ exhibitor.phone }}</td>
             <td>{{ exhibitor.address }}</td>
             <td>{{ exhibitor.club.name }}</td>
+            <td>
+                <a href="/exhibitorList/edit/{{ exhibitor.id }}">Edit</a>
+            </td>
         </tr>
         {% endfor %}
     </table>  

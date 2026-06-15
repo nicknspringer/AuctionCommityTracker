@@ -103,6 +103,24 @@ def buyer_list():
         buyers = Buyer.query.order_by(Buyer.fName).all()
         return render_template("buyerList.html", buyers=buyers)
 
+@app.route("/buyerList/edit/<int:buyer_id>", methods=["POST", "GET"])
+def edit_buyer(buyer_id):
+    buyer = Buyer.query.get_or_404(buyer_id)
+    if request.method == "POST":
+        buyer.fName = request.form["fName"]
+        buyer.lName = request.form["lName"]
+        buyer.phone = request.form["phone"]
+        buyer.address = request.form["address"]
+        try:
+            db.session.commit()
+            return redirect("/buyerList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating buyer: {e}")
+            return f"ERROR: {e}"
+    else:
+        return render_template("editBuyer.html", buyer=buyer)
+    
 @app.route("/clubList", methods=["GET", "POST"])
 def club_list():
     if request.method == "POST":
@@ -119,6 +137,21 @@ def club_list():
     else:
         clubs = Club.query.order_by(Club.name).all()
         return render_template("clubList.html", clubs=clubs)
+
+@app.route("/clubList/edit/<int:club_id>", methods=["POST", "GET"])
+def edit_club(club_id):
+    club = Club.query.get_or_404(club_id)
+    if request.method == "POST":
+        club.name = request.form["name"]
+        try:
+            db.session.commit()
+            return redirect("/clubList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating club: {e}")
+            return f"ERROR: {e}"
+    else:
+        return render_template("editClub.html", club=club)
 
 @app.route("/exhibitorList", methods=["GET", "POST"])
 def exhibitor_list():
@@ -140,6 +173,25 @@ def exhibitor_list():
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         clubs = Club.query.order_by(Club.name).all()
         return render_template("exhibitorList.html", exhibitors=exhibitors, clubs=clubs)
+
+@app.route("/exhibitorList/edit/<int:exhibitor_id>", methods=["POST", "GET"])
+def edit_exhibitor(exhibitor_id):
+    exhibitor = Exhibitor.query.get_or_404(exhibitor_id)
+    if request.method == "POST":
+        exhibitor.fName = request.form["fName"]
+        exhibitor.lName = request.form["lName"]
+        exhibitor.address = request.form["address"]
+        exhibitor.club_id = request.form["club_id"]
+        try:
+            db.session.commit()
+            return redirect("/exhibitorList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating exhibitor: {e}")
+            return f"ERROR: {e}"
+    else:
+        clubs = Club.query.order_by(Club.name).all()
+        return render_template("editExhibitor.html", exhibitor=exhibitor, clubs=clubs)
 
 @app.route("/animalList", methods=["GET", "POST"])
 def animal_list():
@@ -165,6 +217,28 @@ def animal_list():
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("animalList.html", animals=animals, exhibitors=exhibitors)
 
+@app.route("/animalList/edit/<int:animal_id>", methods=["POST", "GET"])
+def edit_animal(animal_id):
+    animal = Animal.query.get_or_404(animal_id)
+    if request.method == "POST":
+        animal.ear_tag_number = request.form["Ear_Tag_No"]
+        animal.name = request.form["name"]
+        animal.species = request.form["species"]
+        animal.weight = request.form["weight"]
+        animal.exhibitor_id = request.form["exhibitor_id"]
+        animal.packer = request.form["packer"]
+        animal.kill_plant = request.form["kill_plant"]
+        try:
+            db.session.commit()
+            return redirect("/animalList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating animal: {e}")
+            return f"ERROR: {e}"
+    else:
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("editAnimal.html", animal=animal, exhibitors=exhibitors)
+
 @app.route("/saleList", methods=["GET", "POST"])
 def sale_list():
     if request.method == "POST":
@@ -187,6 +261,26 @@ def sale_list():
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
+@app.route("/saleList/edit/<int:sale_id>", methods=["POST", "GET"])
+def edit_sale(sale_id):
+    sale = Sale.query.get_or_404(sale_id)
+    if request.method == "POST":
+        sale.animal_id = request.form["animal_id"]
+        sale.buyer_id = request.form["buyer_id"]
+        sale.sale_price = request.form["price"]
+        try:
+            db.session.commit()
+            return redirect("/saleList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating sale: {e}")
+            return f"ERROR: {e}"
+    else:
+        animals = Animal.query.order_by(Animal.ear_tag_number).all()
+        buyers = Buyer.query.order_by(Buyer.fName).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("editSale.html", sale=sale, animals=animals, buyers=buyers, exhibitors=exhibitors)
+
 @app.route("/addonList", methods=["GET", "POST"])
 def addon_list():
     if request.method == "POST":
@@ -207,6 +301,25 @@ def addon_list():
         buyers = Buyer.query.order_by(Buyer.fName).all()
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("addonList.html", addons=addons, buyers=buyers, exhibitors=exhibitors)
+
+@app.route("/addonList/edit/<int:addon_id>", methods=["POST", "GET"])
+def edit_addon(addon_id):
+    addon = Addon.query.get_or_404(addon_id)
+    if request.method == "POST":
+        addon.buyer_id = request.form["buyer_id"]
+        addon.exhibitor_id = request.form["exhibitor_id"]
+        addon.price = request.form["Price"]
+        try:
+            db.session.commit()
+            return redirect("/addonList")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating addon: {e}")
+            return f"ERROR: {e}"
+    else:
+        buyers = Buyer.query.order_by(Buyer.fName).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        return render_template("editAddon.html", addon=addon, buyers=buyers, exhibitors=exhibitors)
 
 if __name__ == "__main__":
     with app.app_context():
