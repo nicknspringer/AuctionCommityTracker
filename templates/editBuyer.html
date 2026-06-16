@@ -7,11 +7,11 @@
 {% block body %}
     <h1>Edit Buyer</h1>
     <form actions="editBuyer/{{ buyer.id }}" method="POST">
-        <label for="fName">First Name:</label>
-        <input type="text" name="fName" placeholder="First Name" value="{{ buyer.fName }}" required>
+        <label for="BidderNumber">Bidder Number:</label>
+        <input type="text" name="BidderNumber" placeholder="Bidder Number" value="{{ buyer.bidder_number }}" required>
         <br>
-        <label for="lName">Last Name:</label>
-        <input type="text" name="lName" placeholder="Last Name" value="{{ buyer.lName }}" required>
+        <label for="name">Name:</label>
+        <input type="text" name="name" placeholder="Buyer Name" value="{{ buyer.name }}" required>
         <br>
         <label for="phone">Phone Number:</label>
         <input type="text" name="phone" placeholder="Buyer Phone Number" value="{{ buyer.phone }}">

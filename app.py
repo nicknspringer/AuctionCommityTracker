@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
+from pandas import pandas as pd
 
 app = Flask(__name__)
 Scss(app)
@@ -10,13 +11,13 @@ db = SQLAlchemy(app)
 
 class Buyer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fName = db.Column(db.String(80), nullable=False)
-    lName = db.Column(db.String(80), nullable=False)
+    bidder_number = db.Column(db.Integer, nullable=True)
+    name = db.Column(db.String(80), nullable=False)
     phone = db.Column(db.String(120), nullable=True)
     address = db.Column(db.String(256), nullable=False)
 
     def __repr__(self):
-        return f"<Buyer {self.fName}>"
+        return f"<Buyer {self.name}>"
     
 class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,7 +65,7 @@ class Sale(db.Model):
     buyer = db.relationship("Buyer", backref=db.backref("purchases", lazy=True))
 
     def __repr__(self):
-        return f"<Sale {self.animal.name} to {self.buyer.fName} for ${self.sale_price}/lb>"
+        return f"<Sale {self.animal.name} to {self.buyer.name} for ${self.sale_price}/lb>"
     
 class Addon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -86,11 +87,11 @@ def main():
 @app.route("/buyerList", methods=["GET", "POST"])
 def buyer_list():
     if request.method == "POST":
-        fName = request.form["fName"]
-        lName = request.form["lName"]
+        name = request.form["name"]
         phone = request.form["Phone"]
         address = request.form["Address"]
-        buyer = Buyer(fName=fName, lName=lName, phone=phone, address=address)
+        bidder_number = request.form["BidderNumber"]
+        buyer = Buyer(name=name, phone=phone, address=address, bidder_number=bidder_number)
         try:
             db.session.add(buyer)
             db.session.commit()
@@ -100,15 +101,15 @@ def buyer_list():
             print(f"Error adding buyer: {e}")
             return f"ERROR: {e}"
     else:
-        buyers = Buyer.query.order_by(Buyer.fName).all()
+        buyers = Buyer.query.order_by(Buyer.name).all()
         return render_template("buyerList.html", buyers=buyers)
 
 @app.route("/buyerList/edit/<int:buyer_id>", methods=["POST", "GET"])
 def edit_buyer(buyer_id):
     buyer = Buyer.query.get_or_404(buyer_id)
     if request.method == "POST":
-        buyer.fName = request.form["fName"]
-        buyer.lName = request.form["lName"]
+        buyer.bidder_number = request.form["BidderNumber"]
+        buyer.name = request.form["name"]
         buyer.phone = request.form["phone"]
         buyer.address = request.form["address"]
         try:
@@ -257,7 +258,7 @@ def sale_list():
     else:
         sales = Sale.query.order_by(Sale.id).all()
         animals = Animal.query.order_by(Animal.ear_tag_number).all()
-        buyers = Buyer.query.order_by(Buyer.fName).all()
+        buyers = Buyer.query.order_by(Buyer.name).all()
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
@@ -277,7 +278,7 @@ def edit_sale(sale_id):
             return f"ERROR: {e}"
     else:
         animals = Animal.query.order_by(Animal.ear_tag_number).all()
-        buyers = Buyer.query.order_by(Buyer.fName).all()
+        buyers = Buyer.query.order_by(Buyer.name).all()
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("editSale.html", sale=sale, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
@@ -298,7 +299,7 @@ def addon_list():
             return f"ERROR: {e}"
     else:
         addons = Addon.query.order_by(Addon.id).all()
-        buyers = Buyer.query.order_by(Buyer.fName).all()
+        buyers = Buyer.query.order_by(Buyer.name).all()
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("addonList.html", addons=addons, buyers=buyers, exhibitors=exhibitors)
 
@@ -317,9 +318,56 @@ def edit_addon(addon_id):
             print(f"Error updating addon: {e}")
             return f"ERROR: {e}"
     else:
-        buyers = Buyer.query.order_by(Buyer.fName).all()
+        buyers = Buyer.query.order_by(Buyer.name).all()
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("editAddon.html", addon=addon, buyers=buyers, exhibitors=exhibitors)
+
+@app.route("/importData", methods=["GET"])
+def import_data_menu():
+    return render_template("importData.html")
+
+@app.route("/importData/<file_type>", methods=["POST", "GET"])
+def import_data(file_type):
+    if request.method == "POST":
+        if "file" not in request.files:
+            return "No file selected"
+
+        file = request.files["file"]
+        if file.filename == "":
+            return "No file selected"
+
+        if file and file.filename.endswith(".csv"):
+            spreadsheet_dataframe = pd.read_csv(file)
+            spreadsheet_dict = spreadsheet_dataframe.to_dict(orient="records")
+            if file_type == "buyer":
+                # Process buyer CSV file here
+                for row in spreadsheet_dict:
+                    name = row.get("name", "")
+                    bidder_number = row.get("no", "")
+                    address = row.get("address", "")
+                    city = row.get("city", "")
+                    state = row.get("state", "")
+                    zip_code = row.get("zip", "")
+
+                    address_full = f"{address}, {city}, {state} {zip_code}"
+                    buyer = Buyer(name=name, bidder_number=bidder_number, address=address_full)
+                    try:
+                        db.session.add(buyer)
+                        db.session.commit()
+                    except Exception as e:
+                        db.session.rollback()
+                        print(f"Error adding buyer from CSV: {e}")
+                        return redirect ("/importData")
+                pass
+                return spreadsheet_dict
+            else:
+                # Process exhibitor CSV file here
+                return f"woop"
+
+        return redirect("/importData")
+    else:
+        return render_template("importData.html")
+
 
 if __name__ == "__main__":
     with app.app_context():

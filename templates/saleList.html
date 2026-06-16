@@ -22,7 +22,7 @@
         <select name="buyer_id" required>
             <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id }}">{{ buyer.fName }} {{ buyer.lName }}</option>
+            <option value="{{ buyer.id }}">{{ buyer.bidder_number }} - {{ buyer.name }}</option>
             {% endfor %}
         </select>
         <br>

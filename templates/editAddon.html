@@ -11,7 +11,7 @@
         <select name="buyer_id">
             <option value="" disabled>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id }}">{{ buyer.fName }} {{ buyer.lName }}</option>
+            <option value="{{ buyer.id }}">{{buyer.bidder_number}} - {{ buyer.name }}</option>
             {% endfor %}
         </select>
         <br>

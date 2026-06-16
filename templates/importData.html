@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Import Data</title>
+
+{% endblock %}
+
+{% block body %}
+    <h1>Import Data</h1>
+
+
+    <form action="/importData/buyer" method="post" enctype="multipart/form-data">
+        <label for="Buyerfile">Select buyer file to import:</label>
+        <input type="file" name="file" accept=".csv .xls .xlsx" id="Buyerfile">
+        <input type="submit" value="Import">
+    </form>
+    <form action="/importData/exhibitor" method="post" enctype="multipart/form-data">
+        <label for="Exhibitorfile">Select exhibitor file to import:</label>
+        <input type="file" name="file" accept=".csv .xls .xlsx" id="Exhibitorfile">
+        <input type="submit" value="Import">
+    </form>
+{% endblock %}
