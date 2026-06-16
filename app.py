@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
-#import pandas as pd
+from pandas import pandas as pd
 
 app = Flask(__name__)
 Scss(app)
@@ -322,7 +322,11 @@ def edit_addon(addon_id):
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("editAddon.html", addon=addon, buyers=buyers, exhibitors=exhibitors)
 
-"""@app.route("/importData/<file_type>", methods=["POST", "GET"])
+@app.route("/importData", methods=["GET"])
+def import_data_menu():
+    return render_template("importData.html")
+
+@app.route("/importData/<file_type>", methods=["POST", "GET"])
 def import_data(file_type):
     if request.method == "POST":
         if "file" not in request.files:
@@ -335,11 +339,10 @@ def import_data(file_type):
         if file and file.filename.endswith(".csv"):
             spreadsheet_dataframe = pd.read_csv(file)
             spreadsheet_dict = spreadsheet_dataframe.to_dict(orient="records")
-
             if file_type == "buyer":
                 # Process buyer CSV file here
                 for row in spreadsheet_dict:
-                    name = row.get("Name", "")
+                    name = row.get("name", "")
                     bidder_number = row.get("no", "")
                     address = row.get("address", "")
                     city = row.get("city", "")
@@ -356,13 +359,14 @@ def import_data(file_type):
                         print(f"Error adding buyer from CSV: {e}")
                         return redirect ("/importData")
                 pass
+                return spreadsheet_dict
             else:
                 # Process exhibitor CSV file here
-                pass
+                return f"woop"
 
         return redirect("/importData")
     else:
-        return render_template("importData.html")"""
+        return render_template("importData.html")
 
 
 if __name__ == "__main__":
