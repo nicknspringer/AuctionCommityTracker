@@ -11,7 +11,7 @@
         <select name="buyer_id">
             <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id }}">{{ buyer.fName }} {{ buyer.lName }}</option>
+            <option value="{{ buyer.id }}">{{ buyer.bidder_number }} - {{ buyer.name }}</option>
             {% endfor %}
         </select>
         <br>
@@ -37,7 +37,7 @@
         </tr>
         {% for addon in addons %}
         <tr>
-            <td>{{ addon.buyer.fName }} {{ addon.buyer.lName }}</td>
+            <td>{{ addon.buyer.bidder_number }} - {{ addon.buyer.name }}</td>
             <td>{{ addon.exhibitor.fName }} {{ addon.exhibitor.lName }}</td>
             <td>${{ addon.price }}</td>
             <td>
