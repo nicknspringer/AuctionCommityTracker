@@ -2,6 +2,7 @@
 $background-color: wheat;
 $foreground-color: #fff;
 $primary-color: #007bff;
+$primary-link-color: #00f;
 $primary-color-hover: darken($primary-color, 10%);
 $title-color: #333;
 $table-header-color: #666;
@@ -22,6 +23,8 @@ body
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    position:sticky;
+    top:5px;
 }
 
 
@@ -65,13 +68,13 @@ body
         }
     }
 
-    a {
-        display: inline-block;
+button {
+        display:inline-block;
         margin: 10px;
+        color: #fff;
+        text-decoration: none;
         padding: 8px 20px;
         background-color: $primary-color;
-        color: #FFF;
-        text-decoration: none;
         border-radius: 5px;
         transition: background-color 0.3s;
 
@@ -79,6 +82,33 @@ body
         {
             background-color: $primary-color-hover;
         }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+
+    a {        
+        color: $primary-link-color;
+        text-decoration: none;
+    }
+
+    .dropdown{
+        position:relative;
+        display:inline-block;
+        max-width: 130;
+    }
+
+    .dropdown-content{
+        display: none;
+        position: absolute;
+        background-color: #fafafa;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    }
+
+    .dropdown:hover .dropdown-content{
+        display:block;
     }
 
     input[type="text"]
