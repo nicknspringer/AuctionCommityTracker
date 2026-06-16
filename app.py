@@ -321,6 +321,23 @@ def edit_addon(addon_id):
         exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
         return render_template("editAddon.html", addon=addon, buyers=buyers, exhibitors=exhibitors)
 
+@app.route("/importData", methods=["POST", "GET"])
+def import_data():
+    if request.method == "POST":
+        if "file" not in request.files:
+            return "No file selected"
+
+        file = request.files["file"]
+        if file.filename == "":
+            return "No file selected"
+
+        if file and file.filename.endswith(".csv"):
+            # Process the CSV file here
+            pass
+
+        return redirect("/importData")
+    else:
+        return render_template("importData.html")
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
