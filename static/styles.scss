@@ -7,6 +7,9 @@ $primary-color-hover: darken($primary-color, 10%);
 $title-color: #333;
 $table-header-color: #666;
 
+$DB-delete-color: #ff0000;
+$DB-delete-color-hover: darken($DB-delete-color, 10%);
+
 body
 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -148,6 +151,14 @@ button {
         &:hover
         {
             background-color: $primary-color-hover;
+        }
+    }
+
+    .WipeDB {
+        background-color: $DB-delete-color;
+
+        &:hover {
+            background-color: $DB-delete-color-hover
         }
     }
 }

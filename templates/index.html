@@ -39,4 +39,16 @@
     <button>
         <a href = "/importData">Import Data</a>
     </button>
+    <div class="dropdown"> 
+        <button class="WipeDB">Delete Database</button>
+        <div class="dropdown-content">
+            <button class="WipeDB">
+                <a href="" onclick="return confirm('Are you sure you want to wipe the Buyer Database?')">Wipe Buyers Database</a>
+            </button>
+            <br>
+            <button class="WipeDB">
+                <a href="" onclick="return confirm('Are you sure you want to wipe the Exhibitor and Animal Databases?')">Wipe Exhibitor and Animal Database</a>
+            </button>
+        </div>
+    </div>
 {% endblock %}
