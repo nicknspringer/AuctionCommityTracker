@@ -7,14 +7,14 @@
 {% block body %}
     <h1>Edit Exhibitor</h1>
     <form actions="editExhibitor/{{ exhibitor.id }}" method="POST">
+        <lable for="sale_number">Sale Number</lable>
+        <input type="number" name="sale_number" placeholder="Sale Number" value="{{ exhibitor.sale_number}}" required>
+        <br>
         <label for="fName">First Name:</label>
         <input type="text" name="fName" placeholder="First Name" value="{{ exhibitor.fName }}" required>
         <br>
         <label for="lName">Last Name:</label>
         <input type="text" name="lName" placeholder="Last Name" value="{{ exhibitor.lName }}" required>
-        <br>
-        <label for="address">Address:</label>
-        <input type="text" name="address" placeholder="Address" value="{{ exhibitor.address }}" required>
         <br>
         <label for="club_id">Club:</label>
         <select name="club_id" required>
@@ -23,6 +23,12 @@
                 <option value="{{ club.id }}" {% if exhibitor.club_id == club.id %}selected{% endif %}>{{ club.name }}</option>
             {% endfor %}
         </select>
+        <br>
+        <label for="division">Division</label>
+        <input type="text" name="division" placeholder="Division" value="{{ exhibitor.division }}" required>
+        <br>
+        <label for="division_placing">Division Placing</label>
+        <input type="text" name="division_placing" placeholder="Division Placing" value="{{ exhibitor.division_placing }}" required>
         <br>
         <input type="submit" value="Update Exhibitor">
     </form>

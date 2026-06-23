@@ -9,6 +9,7 @@
     <form actions="animalList" method="POST">
         <label for="exhibitor_id">Exhibitor:</label>
         <select name="exhibitor_id">
+            <option disabled selected>Select an Exhibitor</option>
             {% for exhibitor in exhibitors %}
             <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
             {% endfor %}
@@ -17,43 +18,28 @@
         <label for="Ear_Tag_No">Ear Tag Number:</label>
         <input type="text" name="Ear_Tag_No" placeholder="Animal Ear Tag Number">
         <br>
-        <label for="Name">Name:</label>
-        <input type="text" name="Name" placeholder="Animal Name" required>
-        <br>
         <label for="Species">Species:</label>
         <input type="text" name="Species" placeholder="Animal Species" required>
         <br>
         <label for="Weight">Weight (lbs):</label>
         <input type="number" name="Weight" placeholder="Animal Weight (lbs)" required>
         <br>
-        <label for="Packer">Packer:</label>
-        <input type="text" name="Packer" placeholder="Packer Name">
-        <br>
-        <label for="Kill_Plant">Kill Plant:</label>
-        <input type="text" name="Kill_Plant" placeholder="Kill Plant Name">
-        <br>
         <input type="submit" value="Add Animal">
     </form>
     <table>
         <tr>
             <th>Exhibitor</th>
-            <th>Name</th>
             <th>Ear Tag Number</th>
             <th>Species</th>
             <th>Weight</th>
-            <th>Packer</th>
-            <th>Kill Plant</th>
             <th>Actions</th>
         </tr>
         {% for animal in animals %}
         <tr>
             <td>{{ animal.exhibitor.fName }} {{ animal.exhibitor.lName }}</td>
-            <td>{{ animal.name }}</td>
             <td>{{ animal.ear_tag_number }}</td>
             <td>{{ animal.species }}</td>
             <td>{{ animal.weight }}</td>
-            <td>{{ animal.packer }}</td>
-            <td>{{ animal.kill_plant }}</td>
             <td>
                 <a href="/animalList/edit/{{ animal.id }}">Edit</a>
             </td>
