@@ -12,6 +12,8 @@ body {
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+  position: sticky;
+  top: 5px;
 }
 
 .content {
@@ -43,18 +45,40 @@ body {
 .content table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-.content a {
+.content button {
   display: inline-block;
   margin: 10px;
+  color: #fff;
+  text-decoration: none;
   padding: 8px 20px;
   background-color: #007bff;
-  color: #FFF;
-  text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s;
 }
-.content a:hover {
+.content button:hover {
   background-color: rgb(0, 98.4, 204);
+}
+.content button a {
+  color: #fff;
+  text-decoration: none;
+}
+.content a {
+  color: #00f;
+  text-decoration: none;
+}
+.content .dropdown {
+  position: relative;
+  display: inline-block;
+  max-width: 130;
+}
+.content .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fafafa;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+.content .dropdown:hover .dropdown-content {
+  display: block;
 }
 .content input[type=text] {
   padding: 8px;
@@ -85,4 +109,10 @@ body {
 }
 .content input[type=submit]:hover {
   background-color: rgb(0, 98.4, 204);
+}
+.content .WipeDB {
+  background-color: #ff0000;
+}
+.content .WipeDB:hover {
+  background-color: #cc0000;
 }/*# sourceMappingURL=styles.css.map */

@@ -7,13 +7,48 @@
 
 {% block body %}
     <h1>Home page</h1>
-    <a href="/buyerList">View Buyers</a>
-    <a href="/clubList">View Clubs</a>
-    <a href="/exhibitorList">View Exhibitors</a>
+    <div class="dropdown"> 
+        <button>Buyer List</button>
+        <div class="dropdown-content">
+            <button>
+                <a href="/buyerList">View Buyers</a>
+            </button>
+            <br>
+            <button>
+                <a href="/buyerList">View Sale Buyers</a>
+            </button>
+        </div>
+    </div>
+    <button>
+        <a href="/clubList">View Clubs</a>
+    </button>
+    <button>
+        <a href="/exhibitorList">View Exhibitors</a>
+    </button>
     <br>
-    <a href="/animalList">View Animals</a>
-    <a href="/saleList">View Sales</a>
-    <a href="/addonList">View Addons</a>
+    <button>
+        <a href="/animalList">View Animals</a>
+    </button>
+    <button>
+        <a href="/saleList">View Sales</a>
+    </button>
+    <button>
+        <a href="/addonList">View Addons</a>
+    </button>
     <br>
-    <a href = "/importData">Import Data</a>
+    <button>
+        <a href = "/importData">Import Data</a>
+    </button>
+    <div class="dropdown"> 
+        <button class="WipeDB">Delete Database</button>
+        <div class="dropdown-content">
+            <button class="WipeDB">
+                <a href="" onclick="return confirm('Are you sure you want to wipe the Buyer Database?')">Wipe Buyers Database</a>
+            </button>
+            <br>
+            <button class="WipeDB">
+                <a href="" onclick="return confirm('Are you sure you want to wipe the Exhibitor and Animal Databases?')">Wipe Exhibitor and Animal Database</a>
+            </button>
+        </div>
+    </div>
 {% endblock %}
