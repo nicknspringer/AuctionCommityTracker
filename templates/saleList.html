@@ -18,16 +18,53 @@
             {% endfor %}
         </select>
         <br>
-        <label for="buyer_id">Buyer:</label>
-        <select name="buyer_id" required>
+        <label for="buyer_id_1">Buyer:</label>
+        <select name="buyer_id_1" required>
             <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id }}">{{ buyer.bidder_number }} - {{ buyer.name }}</option>
+            <option value="{{ buyer.id_1 }}">
+                {{ buyer.bidder_number }} - {{ buyer.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="buyer_id_2">Buyer:</label>
+        <select name="buyer_id_2">
+            <option value="" disabled selected>Select a buyer</option>
+            {% for buyer in buyers %}
+            <option value="{{ buyer.id_2 }}">
+                {{ buyer.bidder_number }} - {{ buyer.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="buyer_id_3">Buyer:</label>
+        <select name="buyer_id_3">
+            <option value="" disabled selected>Select a buyer</option>
+            {% for buyer in buyers %}
+            <option value="{{ buyer.id_3 }}">
+                {{ buyer.bidder_number }} - {{ buyer.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="buyer_id_4">Buyer:</label>
+        <select name="buyer_id_4">
+            <option value="" disabled selected>Select a buyer</option>
+            {% for buyer in buyers %}
+            <option value="{{ buyer.id_4 }}">
+                {{ buyer.bidder_number }} - {{ buyer.name }}
+            </option>
             {% endfor %}
         </select>
         <br>
         <label for="price">Sale Price:</label>
         <input type="number" step="0.01" name="price" placeholder="Sale Price" required>
+        <br><label for="packer">Packer</label>
+        <input type="text" name="packer" placeholder="Packer" required>
+        <br>
+        <label for="kill_plant">Kill Plant</label>
+        <input type="text" name="kill_plant" placeholder="Kill Plant" required>
         <br>
         <input type="submit" value="Add Sale">
     </form>
