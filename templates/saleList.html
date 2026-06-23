@@ -11,9 +11,7 @@
         <select name="animal_id" required>
             <option value="" disabled selected>Select an animal</option>
             {% for animal in animals %}
-            <option value="{{ animal.id }}">Ear tag: {{animal.ear_tag_number}}</option>
-            <option disabled>{{ animal.species }}</option>
-            <option disabled>Exhibitor: {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
+            <option value="{{ animal.id }}">{{animal.ear_tag_number}} - {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
             <hr>
             {% endfor %}
         </select>
@@ -22,7 +20,7 @@
         <select name="buyer_id_1" required>
             <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_1 }}">
+            <option value="{{ buyer.id }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
@@ -30,9 +28,9 @@
         <br>
         <label for="buyer_id_2">Buyer:</label>
         <select name="buyer_id_2">
-            <option value="" disabled selected>Select a buyer</option>
+            <option value="" selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_2 }}">
+            <option value="{{ buyer.id }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
@@ -40,9 +38,9 @@
         <br>
         <label for="buyer_id_3">Buyer:</label>
         <select name="buyer_id_3">
-            <option value="" disabled selected>Select a buyer</option>
+            <option value="" selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_3 }}">
+            <option value="{{ buyer.id }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
@@ -50,9 +48,9 @@
         <br>
         <label for="buyer_id_4">Buyer:</label>
         <select name="buyer_id_4">
-            <option value="" disabled selected>Select a buyer</option>
+            <option value="" selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_4 }}">
+            <option value="{{ buyer.id }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
@@ -61,10 +59,10 @@
         <label for="price">Sale Price:</label>
         <input type="number" step="0.01" name="price" placeholder="Sale Price" required>
         <br><label for="packer">Packer</label>
-        <input type="text" name="packer" placeholder="Packer" required>
+        <input type="text" name="packer" placeholder="Packer">
         <br>
         <label for="kill_plant">Kill Plant</label>
-        <input type="text" name="kill_plant" placeholder="Kill Plant" required>
+        <input type="text" name="kill_plant" placeholder="Kill Plant">
         <br>
         <input type="submit" value="Add Sale">
     </form>
@@ -73,7 +71,10 @@
             <th>Animal Name</th>
             <th>Animal Ear Tag Number</th>
             <th>Exhibitor Name</th>
-            <th>Buyer Name</th>
+            <th>1st Buyer Name</th>
+            <th>2nd Buyer Name</th>
+            <th>3rd Buyer Name</th>
+            <th>4th Buyer Name</th>
             <th>Price Per Pound</th>
             <th>Animal Weight</th>
             <th>Sale Price</th>
@@ -84,7 +85,10 @@
             <td>{{ sale.animal.name }}</td>
             <td>{{ sale.animal.ear_tag_number }}</td>
             <td>{{ sale.animal.exhibitor.fName }} {{ sale.animal.exhibitor.lName }}</td>
-            <td>{{ sale.buyer.fName }} {{ sale.buyer.lName }}</td>
+            <td>{{ sale.buyer1.name }}</td>
+            <td>{{ sale.buyer2.name }}</td>
+            <td>{{ sale.buyer3.name }}</td>
+            <td>{{ sale.buyer4.name }}</td>
             <td>{{ sale.sale_price }}</td>
             <td>{{ sale.animal.weight }}</td>
             <td>{{ sale.sale_price * sale.animal.weight }}</td>

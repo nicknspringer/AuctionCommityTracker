@@ -9,48 +9,48 @@
     <form actions="editSale/{{ sale.id }}" method="POST">
         <label for="animal_id">Animal:</label>
         <select name="animal_id" required>
-            <option value="" disabled>Select an animal</option>
+            <option value="" disabled selected>Select an animal</option>
             {% for animal in animals %}
-            <option value="{{ animal.id }}">{{animal.ear_tag_number}} - {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
+            <option value="{{ animal.id }}" {% if animal.id == sale.animal.id %}selected{% endif %}>{{animal.ear_tag_number}} - {{animal.exhibitor.fName}} {{animal.exhibitor.lName}}</option>
             <hr>
             {% endfor %}
         </select>
         <br>
         <label for="buyer_id_1">Buyer:</label>
         <select name="buyer_id_1" required>
-            <option value="" disabled>Select a buyer</option>
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_1 }}" {% if buyer.id == sale.buyer_id_1 %}selected{% endif %}>
+            <option value="{{ buyer.id }}" {% if buyer.id == sale.buyer_id_1 %}selected{% endif %}>
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
         </select>
         <br>
         <label for="buyer_id_2">Buyer:</label>
-        <select name="buyer_id_2" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_2" >
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_2 }}" {% if buyer.id == sale.buyer_id_2 %}selected{% endif %}>
+            <option value="{{ buyer.id }}" {% if buyer.id == sale.buyer_id_2 %}selected{% endif %}>
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
         </select>
         <br>
         <label for="buyer_id_3">Buyer:</label>
-        <select name="buyer_id_3" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_3" >
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_3 }}" {% if buyer.id == sale.buyer_id_3 %}selected{% endif %}>
+            <option value="{{ buyer.id }}" {% if buyer.id == sale.buyer_id_3 %}selected{% endif %}>
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
         </select>
         <br>
         <label for="buyer_id_4">Buyer:</label>
-        <select name="buyer_id_4" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_4" >
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
-            <option value="{{ buyer.id_4 }}" {% if buyer.id == sale.buyer_id_4 %}selected{% endif %}>
+            <option value="{{ buyer.id }}" {% if buyer.id == sale.buyer_id_4 %}selected{% endif %}>
                 {{ buyer.bidder_number }} - {{ buyer.name }}
             </option>
             {% endfor %}
@@ -60,10 +60,10 @@
         <input type="number" step="0.01" name="price" placeholder="Sale Price" value="{{ sale.sale_price }}" required>
         <br>
         <label for="packer">Packer</label>
-        <input type="text" name="packer" placeholder="Packer" value="{{ sale.packer }}" required>
+        <input type="text" name="packer" placeholder="Packer" value="{{ sale.packer }}" >
         <br>
         <label for="kill_plant">Kill Plant</label>
-        <input type="text" name="kill_plant" placeholder="Kill Plant" value="{{ sale.kill_plant }}" required>
+        <input type="text" name="kill_plant" placeholder="Kill Plant" value="{{ sale.kill_plant }}" >
         <br>
         <input type="submit" value="Update Sale">
     </form>

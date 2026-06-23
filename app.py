@@ -33,7 +33,7 @@ class Exhibitor(db.Model):
     sale_number = db.Column(db.Integer, nullable=False)
     division = db.Column(db.String(80))
     division_placing = db.Column(db.String(80))
-    club_id = db.Column(db.Integer, db.ForeignKey("club.id"), nullable=False)
+    club_id = db.Column(db.Integer, db.ForeignKey("club.id"))
 
     club = db.relationship("Club", backref=db.backref("exhibitors", lazy=True))
 
@@ -43,7 +43,7 @@ class Exhibitor(db.Model):
 class Animal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ear_tag_number = db.Column(db.Integer, nullable=False)
-    species = db.Column(db.String(80), nullable=False)
+    species = db.Column(db.String(80))
     weight = db.Column(db.Float, nullable=False)
     picture = db.Column(db.LargeBinary, nullable=True)
     exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
@@ -58,9 +58,9 @@ class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"), nullable=False)
     buyer_id_1 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
-    buyer_id_2 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
-    buyer_id_3 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
-    buyer_id_4 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    buyer_id_2 = db.Column(db.Integer, db.ForeignKey("buyer.id"))
+    buyer_id_3 = db.Column(db.Integer, db.ForeignKey("buyer.id"))
+    buyer_id_4 = db.Column(db.Integer, db.ForeignKey("buyer.id"))
     packer = db.Column(db.String(80), nullable=True)
     kill_plant = db.Column(db.String(80), nullable=True)
     sale_price = db.Column(db.Float, nullable=False)
@@ -109,7 +109,7 @@ def buyer_list():
             print(f"Error adding buyer: {e}")
             return f"ERROR: {e}"
     else:
-        buyers = Buyer.query.order_by(Buyer.name).all()
+        buyers = Buyer.query.order_by(Buyer.bidder_number).all()
         return render_template("buyerList.html", buyers=buyers)
 
 @app.route("/buyerList/edit/<int:buyer_id>", methods=["POST", "GET"])
@@ -181,7 +181,7 @@ def exhibitor_list():
             print(f"Error adding exhibitor: {e}")
             return f"ERROR: {e}"
     else:
-        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.sale_number).all()
         clubs = Club.query.order_by(Club.name).all()
         return render_template("exhibitorList.html", exhibitors=exhibitors, clubs=clubs)
 
@@ -250,14 +250,15 @@ def edit_animal(animal_id):
 @app.route("/saleList", methods=["GET", "POST"])
 def sale_list():
     if request.method == "POST":
+        # Add sale to database
         animal_id = request.form["animal_id"]
         buyer_id_1 = request.form["buyer_id_1"]
         buyer_id_2 = request.form["buyer_id_2"]
         buyer_id_3 = request.form["buyer_id_3"]
         buyer_id_4 = request.form["buyer_id_4"]
         sale_price = request.form["price"]
-        packer = request.form["Packer"]
-        kill_plant = request.form["Kill_Plant"]
+        packer = request.form["packer"]
+        kill_plant = request.form["kill_plant"]
         sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant)
         try:
             db.session.add(sale)
@@ -270,8 +271,8 @@ def sale_list():
     else:
         sales = Sale.query.order_by(Sale.id).all()
         animals = Animal.query.order_by(Animal.ear_tag_number).all()
-        buyers = Buyer.query.order_by(Buyer.name).all()
-        exhibitors = Exhibitor.query.order_by(Exhibitor.fName).all()
+        buyers = Buyer.query.order_by(Buyer.bidder_number).all()
+        exhibitors = Exhibitor.query.order_by(Exhibitor.sale_number).all()
         return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
 @app.route("/saleList/edit/<int:sale_id>", methods=["POST", "GET"])
@@ -284,8 +285,8 @@ def edit_sale(sale_id):
         sale.buyer_id_3 = request.form["buyer_id_3"]
         sale.buyer_id_4 = request.form["buyer_id_4"]
         sale.sale_price = request.form["price"]
-        sale.packer = request.form["Packer"]
-        sale.kill_plant = request.form["Kill_Plant"]
+        sale.packer = request.form["packer"]
+        sale.kill_plant = request.form["kill_plant"]
         try:
             db.session.commit()
             return redirect("/saleList")
@@ -377,6 +378,34 @@ def import_data(file_type):
                         return redirect ("/importData")
                 pass
                 return spreadsheet_dict
+            elif file_type == "exhibitor":
+                #return spreadsheet_dict# Process exhibitor CSV file here
+                for row in spreadsheet_dict:
+                    saleOrder = row.get("Sale Order", "")
+                    lName = row.get("Last Name", "")
+                    fName = row.get("First Name", "")
+                    tagNumber = row.get("Tag ID", "")
+                    club = row.get("Club", "")
+                    saleWeight = row.get("Sale Weight", "")
+                    division = row.get("Division", "")
+                    divisionPlacing = row.get("Division Placing")
+                    #TODO: figure out how to get species for animal
+                    #TODO: get club id from club name here
+
+                    
+                    try:
+                        exhibitor = Exhibitor(fName=fName, lName=lName, sale_number=saleOrder, division=division, division_placing=divisionPlacing)#,club
+                        db.session.add(exhibitor)
+                        db.session.commit()
+                        animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id)
+                        db.session.add(animal)
+                        db.session.commit()
+                    except Exception as e:
+                        db.session.rollback()
+                        print(f"Error adding exhibitor from CSV: {e}")
+                        return f"Error adding exhibitor from CSV: {e}"
+                pass
+                return redirect("/importData")
             else:
                 # Process exhibitor CSV file here
                 return f"woop"
