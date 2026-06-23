@@ -66,7 +66,11 @@ class Sale(db.Model):
     sale_price = db.Column(db.Float, nullable=False)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
-    buyer = db.relationship("Buyer", backref=db.backref("purchases", lazy=True))
+    buyer1 = db.relationship("Buyer", foreign_keys=[buyer_id_1], backref=db.backref("buyer1", lazy=True))
+    buyer2 = db.relationship("Buyer", foreign_keys=[buyer_id_2], backref=db.backref("buyer2", lazy=True))
+    buyer3 = db.relationship("Buyer", foreign_keys=[buyer_id_3], backref=db.backref("buyer3", lazy=True))
+    buyer4 = db.relationship("Buyer", foreign_keys=[buyer_id_4], backref=db.backref("buyer4", lazy=True))
+
 
     def __repr__(self):
         return f"<Sale {self.animal.name} to {self.buyer.name} for ${self.sale_price}/lb>"

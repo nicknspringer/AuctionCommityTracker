@@ -9,6 +9,7 @@
     <form actions="animalList" method="POST">
         <label for="exhibitor_id">Exhibitor:</label>
         <select name="exhibitor_id">
+            <option disabled selected>Select an Exhibitor</option>
             {% for exhibitor in exhibitors %}
             <option value="{{ exhibitor.id }}">{{ exhibitor.fName }} {{ exhibitor.lName }}</option>
             {% endfor %}

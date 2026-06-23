@@ -20,7 +20,7 @@
         <br>
         <label for="buyer_id_1">Buyer:</label>
         <select name="buyer_id_1" required>
-            <option value="" disabled>Select a buyer</option>
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
             <option value="{{ buyer.id_1 }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
@@ -29,8 +29,8 @@
         </select>
         <br>
         <label for="buyer_id_2">Buyer:</label>
-        <select name="buyer_id_2" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_2">
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
             <option value="{{ buyer.id_2 }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
@@ -39,8 +39,8 @@
         </select>
         <br>
         <label for="buyer_id_3">Buyer:</label>
-        <select name="buyer_id_3" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_3">
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
             <option value="{{ buyer.id_3 }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
@@ -49,8 +49,8 @@
         </select>
         <br>
         <label for="buyer_id_4">Buyer:</label>
-        <select name="buyer_id_4" required>
-            <option value="" disabled>Select a buyer</option>
+        <select name="buyer_id_4">
+            <option value="" disabled selected>Select a buyer</option>
             {% for buyer in buyers %}
             <option value="{{ buyer.id_4 }}">
                 {{ buyer.bidder_number }} - {{ buyer.name }}
