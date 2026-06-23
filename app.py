@@ -30,7 +30,9 @@ class Exhibitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fName = db.Column(db.String(80), nullable=False)
     lName = db.Column(db.String(80), nullable=False)
-    address = db.Column(db.String(256), nullable=False)
+    sale_number = db.Column(db.Integer, nullable=False)
+    division = db.Column(db.String(80))
+    division_placing = db.Column(db.String(80))
     club_id = db.Column(db.Integer, db.ForeignKey("club.id"), nullable=False)
 
     club = db.relationship("Club", backref=db.backref("exhibitors", lazy=True))
@@ -41,12 +43,9 @@ class Exhibitor(db.Model):
 class Animal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ear_tag_number = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(80), nullable=False)
     species = db.Column(db.String(80), nullable=False)
     weight = db.Column(db.Float, nullable=False)
     picture = db.Column(db.LargeBinary, nullable=True)
-    packer = db.Column(db.String(80), nullable=True)
-    kill_plant = db.Column(db.String(80), nullable=True)
     exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
     
 
@@ -58,7 +57,12 @@ class Animal(db.Model):
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"), nullable=False)
-    buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    buyer_id_1 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    buyer_id_2 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    buyer_id_3 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    buyer_id_4 = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
+    packer = db.Column(db.String(80), nullable=True)
+    kill_plant = db.Column(db.String(80), nullable=True)
     sale_price = db.Column(db.Float, nullable=False)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
@@ -157,11 +161,13 @@ def edit_club(club_id):
 @app.route("/exhibitorList", methods=["GET", "POST"])
 def exhibitor_list():
     if request.method == "POST":
+        sale_number = request.form["sale_number"]
         fName = request.form["fName"]
         lName = request.form["lName"]
-        address = request.form["Address"]
         club_id = request.form["club_id"]
-        exhibitor = Exhibitor(fName=fName, lName=lName, address=address, club_id=club_id)
+        division = request.form["division"]
+        division_placing = request.form["division_placing"]
+        exhibitor = Exhibitor(sale_number=sale_number, fName=fName, lName=lName, club_id=club_id, division=division, division_placing=division_placing)
         try:
             db.session.add(exhibitor)
             db.session.commit()
@@ -179,9 +185,11 @@ def exhibitor_list():
 def edit_exhibitor(exhibitor_id):
     exhibitor = Exhibitor.query.get_or_404(exhibitor_id)
     if request.method == "POST":
+        exhibitor.sale_number = request.form["sale_number"]
         exhibitor.fName = request.form["fName"]
         exhibitor.lName = request.form["lName"]
-        exhibitor.address = request.form["address"]
+        exhibitor.division = request.form["division"]
+        exhibitor.division_placing = request.form["division_placing"]
         exhibitor.club_id = request.form["club_id"]
         try:
             db.session.commit()
@@ -198,13 +206,10 @@ def edit_exhibitor(exhibitor_id):
 def animal_list():
     if request.method == "POST":
         ear_tag_number = request.form["Ear_Tag_No"]
-        name = request.form["Name"]
         species = request.form["Species"]
         weight = request.form["Weight"]
         exhibitor_id = request.form["exhibitor_id"]
-        packer = request.form["Packer"]
-        kill_plant = request.form["Kill_Plant"]
-        animal = Animal(ear_tag_number=ear_tag_number, name=name, species=species, weight=weight, exhibitor_id=exhibitor_id, packer=packer, kill_plant=kill_plant)
+        animal = Animal(ear_tag_number=ear_tag_number, species=species, weight=weight, exhibitor_id=exhibitor_id)
         try:
             db.session.add(animal)
             db.session.commit()
@@ -227,8 +232,6 @@ def edit_animal(animal_id):
         animal.species = request.form["species"]
         animal.weight = request.form["weight"]
         animal.exhibitor_id = request.form["exhibitor_id"]
-        animal.packer = request.form["packer"]
-        animal.kill_plant = request.form["kill_plant"]
         try:
             db.session.commit()
             return redirect("/animalList")
@@ -244,9 +247,14 @@ def edit_animal(animal_id):
 def sale_list():
     if request.method == "POST":
         animal_id = request.form["animal_id"]
-        buyer_id = request.form["buyer_id"]
+        buyer_id_1 = request.form["buyer_id_1"]
+        buyer_id_2 = request.form["buyer_id_2"]
+        buyer_id_3 = request.form["buyer_id_3"]
+        buyer_id_4 = request.form["buyer_id_4"]
         sale_price = request.form["price"]
-        sale = Sale(animal_id=animal_id, buyer_id=buyer_id, sale_price=sale_price)
+        packer = request.form["Packer"]
+        kill_plant = request.form["Kill_Plant"]
+        sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant)
         try:
             db.session.add(sale)
             db.session.commit()
@@ -267,8 +275,13 @@ def edit_sale(sale_id):
     sale = Sale.query.get_or_404(sale_id)
     if request.method == "POST":
         sale.animal_id = request.form["animal_id"]
-        sale.buyer_id = request.form["buyer_id"]
+        sale.buyer_id_1 = request.form["buyer_id_1"]
+        sale.buyer_id_2 = request.form["buyer_id_2"]
+        sale.buyer_id_3 = request.form["buyer_id_3"]
+        sale.buyer_id_4 = request.form["buyer_id_4"]
         sale.sale_price = request.form["price"]
+        sale.packer = request.form["Packer"]
+        sale.kill_plant = request.form["Kill_Plant"]
         try:
             db.session.commit()
             return redirect("/saleList")
