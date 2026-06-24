@@ -18,13 +18,6 @@ class Buyer(db.Model):
 
     def __repr__(self):
         return f"<Buyer {self.name}>"
-    
-class Club(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-
-    def __repr__(self):
-        return f"<Club {self.name}>"
 
 class Exhibitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,13 +26,11 @@ class Exhibitor(db.Model):
     sale_number = db.Column(db.Integer, nullable=False)
     division = db.Column(db.String(80))
     division_placing = db.Column(db.String(80))
-    club_id = db.Column(db.Integer, db.ForeignKey("club.id"))
-
-    club = db.relationship("Club", backref=db.backref("exhibitors", lazy=True))
+    club = db.Column(db.String)
 
     def __repr__(self):
         return f"<Exhibitor {self.fName}>"
-    
+
 class Animal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ear_tag_number = db.Column(db.Integer, nullable=False)
@@ -47,13 +38,13 @@ class Animal(db.Model):
     weight = db.Column(db.Float, nullable=False)
     picture = db.Column(db.LargeBinary, nullable=True)
     exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
-    
+
 
     exhibitor = db.relationship("Exhibitor", backref=db.backref("animals", lazy=True))
 
     def __repr__(self):
         return f"<Animal {self.name}>"
-    
+
 class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     animal_id = db.Column(db.Integer, db.ForeignKey("animal.id"), nullable=False)
@@ -74,7 +65,7 @@ class Sale(db.Model):
 
     def __repr__(self):
         return f"<Sale {self.animal.name} to {self.buyer.name} for ${self.sale_price}/lb>"
-    
+
 class Addon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     buyer_id = db.Column(db.Integer, db.ForeignKey("buyer.id"), nullable=False)
@@ -89,7 +80,7 @@ class Addon(db.Model):
 
 
 @app.route("/", methods=["GET", "POST"])
-def main():    
+def main():
     return render_template("index.html")
 
 @app.route("/buyerList", methods=["GET", "POST"])
@@ -129,38 +120,6 @@ def edit_buyer(buyer_id):
             return f"ERROR: {e}"
     else:
         return render_template("editBuyer.html", buyer=buyer)
-    
-@app.route("/clubList", methods=["GET", "POST"])
-def club_list():
-    if request.method == "POST":
-        name = request.form["Name"]
-        club = Club(name=name)
-        try:
-            db.session.add(club)
-            db.session.commit()
-            return redirect("/clubList")
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error adding club: {e}")
-            return f"ERROR: {e}"
-    else:
-        clubs = Club.query.order_by(Club.name).all()
-        return render_template("clubList.html", clubs=clubs)
-
-@app.route("/clubList/edit/<int:club_id>", methods=["POST", "GET"])
-def edit_club(club_id):
-    club = Club.query.get_or_404(club_id)
-    if request.method == "POST":
-        club.name = request.form["name"]
-        try:
-            db.session.commit()
-            return redirect("/clubList")
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error updating club: {e}")
-            return f"ERROR: {e}"
-    else:
-        return render_template("editClub.html", club=club)
 
 @app.route("/exhibitorList", methods=["GET", "POST"])
 def exhibitor_list():
@@ -168,10 +127,10 @@ def exhibitor_list():
         sale_number = request.form["sale_number"]
         fName = request.form["fName"]
         lName = request.form["lName"]
-        club_id = request.form["club_id"]
+        club = request.form["club"]
         division = request.form["division"]
         division_placing = request.form["division_placing"]
-        exhibitor = Exhibitor(sale_number=sale_number, fName=fName, lName=lName, club_id=club_id, division=division, division_placing=division_placing)
+        exhibitor = Exhibitor(sale_number=sale_number, fName=fName, lName=lName, club=club, division=division, division_placing=division_placing)
         try:
             db.session.add(exhibitor)
             db.session.commit()
@@ -182,8 +141,7 @@ def exhibitor_list():
             return f"ERROR: {e}"
     else:
         exhibitors = Exhibitor.query.order_by(Exhibitor.sale_number).all()
-        clubs = Club.query.order_by(Club.name).all()
-        return render_template("exhibitorList.html", exhibitors=exhibitors, clubs=clubs)
+        return render_template("exhibitorList.html", exhibitors=exhibitors)
 
 @app.route("/exhibitorList/edit/<int:exhibitor_id>", methods=["POST", "GET"])
 def edit_exhibitor(exhibitor_id):
@@ -194,7 +152,7 @@ def edit_exhibitor(exhibitor_id):
         exhibitor.lName = request.form["lName"]
         exhibitor.division = request.form["division"]
         exhibitor.division_placing = request.form["division_placing"]
-        exhibitor.club_id = request.form["club_id"]
+        exhibitor.club = request.form["club"]
         try:
             db.session.commit()
             return redirect("/exhibitorList")
@@ -203,8 +161,7 @@ def edit_exhibitor(exhibitor_id):
             print(f"Error updating exhibitor: {e}")
             return f"ERROR: {e}"
     else:
-        clubs = Club.query.order_by(Club.name).all()
-        return render_template("editExhibitor.html", exhibitor=exhibitor, clubs=clubs)
+        return render_template("editExhibitor.html", exhibitor=exhibitor)
 
 @app.route("/animalList", methods=["GET", "POST"])
 def animal_list():
@@ -357,6 +314,7 @@ def import_data(file_type):
         if file and file.filename.endswith(".csv"):
             spreadsheet_dataframe = pd.read_csv(file)
             spreadsheet_dict = spreadsheet_dataframe.to_dict(orient="records")
+
             if file_type == "buyer":
                 # Process buyer CSV file here
                 for row in spreadsheet_dict:
@@ -380,21 +338,20 @@ def import_data(file_type):
                 return spreadsheet_dict
             elif file_type == "exhibitor":
                 #return spreadsheet_dict# Process exhibitor CSV file here
+                club_dictionary = {}
                 for row in spreadsheet_dict:
                     saleOrder = row.get("Sale Order", "")
                     lName = row.get("Last Name", "")
                     fName = row.get("First Name", "")
                     tagNumber = row.get("Tag ID", "")
-                    club = row.get("Club", "")
+                    club_name = row.get("Club", "")
                     saleWeight = row.get("Sale Weight", "")
                     division = row.get("Division", "")
                     divisionPlacing = row.get("Division Placing")
                     #TODO: figure out how to get species for animal
-                    #TODO: get club id from club name here
 
-                    
                     try:
-                        exhibitor = Exhibitor(fName=fName, lName=lName, sale_number=saleOrder, division=division, division_placing=divisionPlacing)#,club
+                        exhibitor = Exhibitor(fName=fName, lName=lName, sale_number=saleOrder, division=division, division_placing=divisionPlacing, club=club_name)
                         db.session.add(exhibitor)
                         db.session.commit()
                         animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id)

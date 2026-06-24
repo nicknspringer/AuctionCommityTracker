@@ -13,7 +13,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: sticky;
-  top: 5px;
+  top: 4px;
 }
 
 .content {
@@ -32,7 +32,7 @@ body {
 .content table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 80px;
 }
 .content table th, .content table td {
   padding: 10px;
@@ -41,9 +41,14 @@ body {
 .content table th {
   background-color: #666;
   color: #fff;
+  position: sticky;
+  top: 40px;
 }
 .content table tr:nth-child(even) {
   background-color: #f9f9f9;
+}
+.content table tr:nth-child(odd) {
+  background-color: #fff;
 }
 .content button {
   display: inline-block;

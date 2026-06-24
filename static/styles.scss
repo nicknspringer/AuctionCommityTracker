@@ -6,6 +6,7 @@ $primary-link-color: #00f;
 $primary-color-hover: darken($primary-color, 10%);
 $title-color: #333;
 $table-header-color: #666;
+$table-even-color: #f9f9f9;
 
 $DB-delete-color: #ff0000;
 $DB-delete-color-hover: darken($DB-delete-color, 10%);
@@ -27,7 +28,7 @@ body
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
     position:sticky;
-    top:5px;
+    top:4px;
 }
 
 
@@ -51,7 +52,7 @@ body
     {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        margin-top: 80px;
 
         th, td
         {
@@ -63,11 +64,18 @@ body
         {
             background-color: $table-header-color;
             color: $foreground-color;
+            position: sticky;
+            top: 40px;
         }
 
         tr:nth-child(even)
         {
-            background-color: #f9f9f9;
+            background-color: $table-even-color;
+        }
+
+        tr:nth-child(odd)
+        {
+            background-color: $foreground-color;
         }
     }
 
@@ -92,7 +100,7 @@ button {
         }
     }
 
-    a {        
+    a {
         color: $primary-link-color;
         text-decoration: none;
     }
