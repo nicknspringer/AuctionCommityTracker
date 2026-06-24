@@ -189,7 +189,6 @@ def edit_animal(animal_id):
     animal = Animal.query.get_or_404(animal_id)
     if request.method == "POST":
         animal.ear_tag_number = request.form["Ear_Tag_No"]
-        animal.name = request.form["name"]
         animal.species = request.form["species"]
         animal.weight = request.form["weight"]
         animal.exhibitor_id = request.form["exhibitor_id"]
@@ -301,6 +300,13 @@ def edit_addon(addon_id):
 def import_data_menu():
     return render_template("importData.html")
 
+def get_species(club_name):
+    species = ["swine", "chicken", "rabbit", "turkey", "beef", "sheep", "goat"]
+    for animal in species:
+        if animal.lower() in club_name.lower():
+            return animal
+    return "none"
+
 @app.route("/importData/<file_type>", methods=["POST", "GET"])
 def import_data(file_type):
     if request.method == "POST":
@@ -338,7 +344,6 @@ def import_data(file_type):
                 return spreadsheet_dict
             elif file_type == "exhibitor":
                 #return spreadsheet_dict# Process exhibitor CSV file here
-                club_dictionary = {}
                 for row in spreadsheet_dict:
                     saleOrder = row.get("Sale Order", "")
                     lName = row.get("Last Name", "")
@@ -348,13 +353,13 @@ def import_data(file_type):
                     saleWeight = row.get("Sale Weight", "")
                     division = row.get("Division", "")
                     divisionPlacing = row.get("Division Placing")
-                    #TODO: figure out how to get species for animal
-
+                    species = get_species(division)
+                    #return f"{species}"
                     try:
                         exhibitor = Exhibitor(fName=fName, lName=lName, sale_number=saleOrder, division=division, division_placing=divisionPlacing, club=club_name)
                         db.session.add(exhibitor)
                         db.session.commit()
-                        animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id)
+                        animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id, species=species)
                         db.session.add(animal)
                         db.session.commit()
                     except Exception as e:
