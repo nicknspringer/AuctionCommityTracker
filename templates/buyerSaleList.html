@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block Head %}
+    <title>Buyer Sale List</title>
+{% endblock %}
+
+{% block body %}
+    {% set total = buyers|length//3 %}
+    {% if buyers|length % 3 != 0 %}
+        {% set total = total + 1 %}
+    {% endif %}
+    <div class="printInstructions">
+        <h1>
+            CTRL + P to Buyer Sale List
+        </h1>
+    </div>
+    <div class="column">
+        <div>
+            <table>
+                <tr>
+                    <th>Buyer ID</th>
+                    <th>Name</th>
+                </tr>
+                {% for buyer in buyers %}
+                    {% if loop.index <= total %}
+                    <tr>
+                        <td> {{ buyer.bidder_number}} </td>
+                        <td> {{ buyer.name }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div >
+            <table>
+                <tr>
+                    <th>Buyer ID</th>
+                    <th>Name</th>
+                </tr>
+                {% for buyer in buyers %}
+                    {% if loop.index > total and loop.index <=total*2 %}
+                    <tr>
+                        <td> {{ buyer.bidder_number}} </td>
+                        <td> {{ buyer.name }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Buyer ID</th>
+                    <th>Name</th>
+                </tr>
+                {% for buyer in buyers %}
+                    {% if loop.index > total*2 and loop.index <=total*3 %}
+                    <tr>
+                        <td> {{ buyer.bidder_number}} </td>
+                        <td> {{ buyer.name }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
