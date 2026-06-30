@@ -19,13 +19,8 @@
         <label for="Phone">Phone Number:</label>
         <input type="text" name="Phone" placeholder="Exhibitor Phone Number">
         <br>
-        <label for="club_id">Club:</label>
-        <select name="club_id">
-            <option value="" disabled selected>Select a club</option>
-            {% for club in clubs %}
-            <option value="{{ club.id }}">{{ club.name }}</option>
-            {% endfor %}
-        </select>
+        <label for="club">Club:</label>
+        <input type="text" name="club" placeholder="Club">
         <br>
         <label for="division">Division</label>
         <input type="text" name="division" placeholder="Division" required>
@@ -52,7 +47,7 @@
             <td>{{ exhibitor.fName }}</td>
             <td>{{ exhibitor.lName }}</td>
             <td>{{ exhibitor.phone }}</td>
-            <td>{{ exhibitor.club.name }}</td>
+            <td>{{ exhibitor.club }}</td>
             <td>{{ exhibitor.division }}</td>
             <td>{{ exhibitor.division_placing }}</td>
             <td>
@@ -60,5 +55,5 @@
             </td>
         </tr>
         {% endfor %}
-    </table>  
+    </table>
 {% endblock %}
