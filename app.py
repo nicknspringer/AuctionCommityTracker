@@ -103,6 +103,11 @@ def buyer_list():
         buyers = Buyer.query.order_by(Buyer.bidder_number).all()
         return render_template("buyerList.html", buyers=buyers)
 
+@app.route("/buyerSaleList", methods=["GET"])
+def buyer_sale_list():
+    buyers = Buyer.query.order_by(Buyer.bidder_number).all()
+    return render_template("buyerSaleList.html", buyers=buyers)
+
 @app.route("/buyerList/edit/<int:buyer_id>", methods=["POST", "GET"])
 def edit_buyer(buyer_id):
     buyer = Buyer.query.get_or_404(buyer_id)

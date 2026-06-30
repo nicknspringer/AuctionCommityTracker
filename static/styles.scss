@@ -11,9 +11,19 @@ $table-even-color: #f9f9f9;
 $DB-delete-color: #ff0000;
 $DB-delete-color-hover: darken($DB-delete-color, 10%);
 
+$pageWidth: 800px;
+
+@media print
+{
+    .nav, .printInstructions{
+        display: none !important;
+    }
+}
+
 body
 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 12px;
     margin: 0;
     padding: 0;
     background-color: $background-color;
@@ -31,10 +41,15 @@ body
     top:4px;
 }
 
+.printInstructions
+{
+    color: $DB-delete-color;
+}
 
 .content
 {
-    max-width: 800px;
+    max-width: $pageWidth;
+    min-width: $pageWidth;
     margin: 50px auto;
     padding: 20px;
     background-color: $foreground-color;
@@ -48,16 +63,23 @@ body
         margin-bottom: 20px;
     }
 
+    .column
+    {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        padding: 5px;
+        gap: 5px;
+    }
+
     table
     {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 80px;
 
         th, td
         {
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
         }
 
         th
