@@ -1,6 +1,7 @@
 // Color Variables
 $background-color: wheat;
 $foreground-color: #fff;
+$InvoiceBackgroundColor: #99cc99;
 $primary-color: #007bff;
 $primary-link-color: #00f;
 $primary-color-hover: darken($primary-color, 10%);
@@ -63,7 +64,7 @@ body
         margin-bottom: 20px;
     }
 
-    .column
+    .SaleListColumn
     {
         display: grid;
         grid-template-columns: auto auto auto;
@@ -189,6 +190,175 @@ button {
 
         &:hover {
             background-color: $DB-delete-color-hover
+        }
+    }
+
+    .Invoice
+    {
+        background-color: $InvoiceBackgroundColor;
+
+        p
+        {
+            margin:0px;
+        }
+
+        table
+        {
+            width: 100%;
+            border-collapse: collapse;
+
+
+            th, td
+            {
+                padding: 3px;
+                border: none;
+                background-color: $InvoiceBackgroundColor;
+                color: #000;
+            }
+
+            th
+            {
+                text-decoration: underline;
+            }
+        }
+
+        .date
+        {
+            text-align: right;
+            padding-right: 25px;
+        }
+
+        .columns
+        {
+            display: grid;
+            grid-template-columns: 28px 93%;
+            padding: 4px;
+            gap: 8px;
+
+            .numberedBox
+            {
+                h1
+                {
+                    font-size: 20px;
+                }
+            }
+
+            .contentBox
+            {
+                border-width: 2px;
+                border-style: solid;
+                border-color: #000;
+                border-radius: 10px;
+
+                text-align: left;
+                padding: 10px;
+
+                .identificationBox
+                {
+                    display: grid;
+                    grid-template-columns: auto auto;
+                }
+
+                .marketBox
+                {
+                    display: grid;
+                    grid-template-columns: 550px auto;
+                    gap: 20px;
+                }
+            }
+
+            .commission
+            {
+                text-align: left;
+                padding: 0px;
+                display: grid;
+                grid-template-columns: auto auto auto;
+            }
+
+            .packAndWrapBox
+            {
+                display: grid;
+                grid-template-columns: auto auto;
+                grid-template-rows: auto auto;
+
+                input[type='checkbox']
+                {
+                    width: 20px;
+                    height: 20px;
+                }
+
+                label
+                {
+                    vertical-align: center;
+                }
+            }
+
+            .resaleBox
+            {
+                display: grid;
+                grid-template-columns: 40% 60%;
+
+                p
+                {
+                    margin-left: 20px;
+                }
+
+                .resaleCheckBox
+                {
+                    display: grid;
+                    grid-template-columns: 40% 60%;
+                    border-width: 2px;
+                    border-style: solid;
+                    border-radius: 10px;
+                }
+            }
+
+            .resaleTableBox
+            {
+                display: grid;
+                grid-template-columns: 60% 40%;
+            }
+
+            .paymentInstructions
+            {
+                text-align: left;
+                p
+                {
+                    font-size: 15;
+                }
+
+                .paymentDetails
+                {
+                    margin-top:5px;
+                    display: grid;
+                    grid-template-columns: 30% 20% 50%;
+                    gap: 10px;
+
+
+                    input[type="text"]
+                    {
+                        padding:0px;
+                        width:50px;
+                    }
+                }
+            }
+
+            .buyersBox
+            {
+                text-align: left;
+
+                input[type="text"]
+                {
+                    padding:0px;
+                    box-sizing: border-box;
+                }
+            }
+
+            .signatureBox
+            {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
         }
     }
 }

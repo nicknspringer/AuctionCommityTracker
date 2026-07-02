@@ -40,7 +40,7 @@ body {
   color: #333;
   margin-bottom: 20px;
 }
-.content .column {
+.content .SaleListColumn {
   display: grid;
   grid-template-columns: auto auto auto;
   padding: 5px;
@@ -136,4 +136,116 @@ body {
 }
 .content .WipeDB:hover {
   background-color: #cc0000;
+}
+.content .Invoice {
+  background-color: #99cc99;
+}
+.content .Invoice p {
+  margin: 0px;
+}
+.content .Invoice table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.content .Invoice table th, .content .Invoice table td {
+  padding: 3px;
+  border: none;
+  background-color: #99cc99;
+  color: #000;
+}
+.content .Invoice table th {
+  text-decoration: underline;
+}
+.content .Invoice .date {
+  text-align: right;
+  padding-right: 25px;
+}
+.content .Invoice .columns {
+  display: grid;
+  grid-template-columns: 28px 93%;
+  padding: 4px;
+  gap: 8px;
+}
+.content .Invoice .columns .numberedBox h1 {
+  font-size: 20px;
+}
+.content .Invoice .columns .contentBox {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #000;
+  border-radius: 10px;
+  text-align: left;
+  padding: 10px;
+}
+.content .Invoice .columns .contentBox .identificationBox {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.content .Invoice .columns .contentBox .marketBox {
+  display: grid;
+  grid-template-columns: 550px auto;
+  gap: 20px;
+}
+.content .Invoice .columns .commission {
+  text-align: left;
+  padding: 0px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+.content .Invoice .columns .packAndWrapBox {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+}
+.content .Invoice .columns .packAndWrapBox input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+.content .Invoice .columns .packAndWrapBox label {
+  vertical-align: center;
+}
+.content .Invoice .columns .resaleBox {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+.content .Invoice .columns .resaleBox p {
+  margin-left: 20px;
+}
+.content .Invoice .columns .resaleBox .resaleCheckBox {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+}
+.content .Invoice .columns .resaleTableBox {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+.content .Invoice .columns .paymentInstructions {
+  text-align: left;
+}
+.content .Invoice .columns .paymentInstructions p {
+  font-size: 15;
+}
+.content .Invoice .columns .paymentInstructions .paymentDetails {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: 30% 20% 50%;
+  gap: 10px;
+}
+.content .Invoice .columns .paymentInstructions .paymentDetails input[type=text] {
+  padding: 0px;
+  width: 50px;
+}
+.content .Invoice .columns .buyersBox {
+  text-align: left;
+}
+.content .Invoice .columns .buyersBox input[type=text] {
+  padding: 0px;
+  box-sizing: border-box;
+}
+.content .Invoice .columns .signatureBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }/*# sourceMappingURL=styles.css.map */

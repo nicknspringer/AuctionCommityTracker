@@ -381,6 +381,9 @@ def import_data(file_type):
     else:
         return render_template("importData.html")
 
+@app.route("/Invoice")
+def display_invoice():
+    return render_template("invoice.html")
 
 if __name__ == "__main__":
     with app.app_context():
