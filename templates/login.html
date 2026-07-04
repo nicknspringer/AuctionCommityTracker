@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Login Page</title>
+{% endblock %}
+
+
+{% block body %}
+<h1>Login Page</h1>
+<form actions="Login" method="POST"L>
+    <label for="pin">PIN</label>
+    <input type="text" name="pin" placeholder="PIN" required>
+    <input type="submit" value="Log In">
+</form>
+{% endblock %}

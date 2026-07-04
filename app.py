@@ -1,10 +1,16 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, login_user, login_required, UserMixin
 from pandas import pandas as pd
 
 app = Flask(__name__)
 Scss(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+app.config['SECRET_KEY'] = 'ihaveasecret'
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///auction.db"
 db = SQLAlchemy(app)
@@ -78,12 +84,43 @@ class Addon(db.Model):
     def __repr__(self):
         return f"<Addon {self.price}>"
 
+users = {}
+
+class User(UserMixin):
+    id = 0
+
+    def __init__(self):
+        self.id += 1
+
+
+global_pin = "1234"
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User()
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        pin = request.form["pin"]
+        if pin == global_pin:
+            user = User()
+            print(f"yipee")
+            login_user(user)
+            return redirect("/")
+        else:
+            flash("invalid pin")
+
+    return render_template("login.html")
 
 @app.route("/", methods=["GET", "POST"])
+@login_required
 def main():
+    print(users)
     return render_template("index.html")
 
 @app.route("/buyerList", methods=["GET", "POST"])
+@login_required
 def buyer_list():
     if request.method == "POST":
         name = request.form["name"]
@@ -104,11 +141,13 @@ def buyer_list():
         return render_template("buyerList.html", buyers=buyers)
 
 @app.route("/buyerSaleList", methods=["GET"])
+@login_required
 def buyer_sale_list():
     buyers = Buyer.query.order_by(Buyer.bidder_number).all()
     return render_template("buyerSaleList.html", buyers=buyers)
 
 @app.route("/buyerList/edit/<int:buyer_id>", methods=["POST", "GET"])
+@login_required
 def edit_buyer(buyer_id):
     buyer = Buyer.query.get_or_404(buyer_id)
     if request.method == "POST":
@@ -127,6 +166,7 @@ def edit_buyer(buyer_id):
         return render_template("editBuyer.html", buyer=buyer)
 
 @app.route("/exhibitorList", methods=["GET", "POST"])
+@login_required
 def exhibitor_list():
     if request.method == "POST":
         sale_number = request.form["sale_number"]
@@ -149,6 +189,7 @@ def exhibitor_list():
         return render_template("exhibitorList.html", exhibitors=exhibitors)
 
 @app.route("/exhibitorList/edit/<int:exhibitor_id>", methods=["POST", "GET"])
+@login_required
 def edit_exhibitor(exhibitor_id):
     exhibitor = Exhibitor.query.get_or_404(exhibitor_id)
     if request.method == "POST":
@@ -169,6 +210,7 @@ def edit_exhibitor(exhibitor_id):
         return render_template("editExhibitor.html", exhibitor=exhibitor)
 
 @app.route("/animalList", methods=["GET", "POST"])
+@login_required
 def animal_list():
     if request.method == "POST":
         ear_tag_number = request.form["Ear_Tag_No"]
@@ -190,6 +232,7 @@ def animal_list():
         return render_template("animalList.html", animals=animals, exhibitors=exhibitors)
 
 @app.route("/animalList/edit/<int:animal_id>", methods=["POST", "GET"])
+@login_required
 def edit_animal(animal_id):
     animal = Animal.query.get_or_404(animal_id)
     if request.method == "POST":
@@ -209,6 +252,7 @@ def edit_animal(animal_id):
         return render_template("editAnimal.html", animal=animal, exhibitors=exhibitors)
 
 @app.route("/saleList", methods=["GET", "POST"])
+@login_required
 def sale_list():
     if request.method == "POST":
         # Add sale to database
@@ -237,6 +281,7 @@ def sale_list():
         return render_template("saleList.html", sales=sales, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
 @app.route("/saleList/edit/<int:sale_id>", methods=["POST", "GET"])
+@login_required
 def edit_sale(sale_id):
     sale = Sale.query.get_or_404(sale_id)
     if request.method == "POST":
@@ -262,6 +307,7 @@ def edit_sale(sale_id):
         return render_template("editSale.html", sale=sale, animals=animals, buyers=buyers, exhibitors=exhibitors)
 
 @app.route("/addonList", methods=["GET", "POST"])
+@login_required
 def addon_list():
     if request.method == "POST":
         buyer_id = request.form["buyer_id"]
@@ -283,6 +329,7 @@ def addon_list():
         return render_template("addonList.html", addons=addons, buyers=buyers, exhibitors=exhibitors)
 
 @app.route("/addonList/edit/<int:addon_id>", methods=["POST", "GET"])
+@login_required
 def edit_addon(addon_id):
     addon = Addon.query.get_or_404(addon_id)
     if request.method == "POST":
@@ -302,6 +349,7 @@ def edit_addon(addon_id):
         return render_template("editAddon.html", addon=addon, buyers=buyers, exhibitors=exhibitors)
 
 @app.route("/importData", methods=["GET"])
+@login_required
 def import_data_menu():
     return render_template("importData.html")
 
@@ -313,6 +361,7 @@ def get_species(club_name):
     return "none"
 
 @app.route("/importData/<file_type>", methods=["POST", "GET"])
+@login_required
 def import_data(file_type):
     if request.method == "POST":
         if "file" not in request.files:
@@ -382,10 +431,11 @@ def import_data(file_type):
         return render_template("importData.html")
 
 @app.route("/Invoice")
+@login_required
 def display_invoice():
     return render_template("invoice.html")
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=False, host="0.0.0.0")
