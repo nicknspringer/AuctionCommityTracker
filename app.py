@@ -84,8 +84,6 @@ class Addon(db.Model):
     def __repr__(self):
         return f"<Addon {self.price}>"
 
-users = {}
-
 class User(UserMixin):
     id = 0
 
@@ -93,7 +91,7 @@ class User(UserMixin):
         self.id += 1
 
 
-global_pin = "1234"
+global_pin = ""
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -116,7 +114,6 @@ def login():
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def main():
-    print(users)
     return render_template("index.html")
 
 @app.route("/buyerList", methods=["GET", "POST"])
