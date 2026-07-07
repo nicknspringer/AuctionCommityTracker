@@ -61,6 +61,7 @@ class Sale(db.Model):
     packer = db.Column(db.String(80), nullable=True)
     kill_plant = db.Column(db.String(80), nullable=True)
     sale_price = db.Column(db.Float, nullable=False)
+    is_processed = db.Column(db.Boolean, nullable=False)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
     buyer1 = db.relationship("Buyer", foreign_keys=[buyer_id_1], backref=db.backref("buyer1", lazy=True))
@@ -261,7 +262,8 @@ def sale_list():
         sale_price = request.form["price"]
         packer = request.form["packer"]
         kill_plant = request.form["kill_plant"]
-        sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant)
+        is_processed=False
+        sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant, is_processed=is_processed)
         try:
             db.session.add(sale)
             db.session.commit()

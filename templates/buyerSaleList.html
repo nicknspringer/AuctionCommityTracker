@@ -25,7 +25,9 @@
                     {% if loop.index <= total %}
                     <tr>
                         <td> {{ buyer.bidder_number}} </td>
-                        <td> {{ buyer.name }}</td>
+                        <td>
+                             <div style="break-before: auto;">{{ buyer.name }}</div>
+                        </td>
                     </tr>
                     {% endif %}
                 {% endfor %}
@@ -41,7 +43,9 @@
                     {% if loop.index > total and loop.index <=total*2 %}
                     <tr>
                         <td> {{ buyer.bidder_number}} </td>
-                        <td> {{ buyer.name }}</td>
+                        <td>
+                             <div style="break-before: auto;">{{ buyer.name }}</div>
+                        </td>
                     </tr>
                     {% endif %}
                 {% endfor %}
@@ -57,7 +61,9 @@
                     {% if loop.index > total*2 and loop.index <=total*3 %}
                     <tr>
                         <td> {{ buyer.bidder_number}} </td>
-                        <td> {{ buyer.name }}</td>
+                        <td>
+                             <div style="break-before: auto;">{{ buyer.name }}</div>
+                        </td>
                     </tr>
                     {% endif %}
                 {% endfor %}
