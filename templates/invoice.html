@@ -14,10 +14,10 @@
             <div class="contentBox">
                 <div class="identificationBox">
                     <div>
-                        Seller: {{exhibitor.fName}} {{exhibitor.lName}}
+                        Seller: --Name--
                     </div>
                     <div>
-                        Club: {{exhibitor.club}}
+                        Club: --Club--
                     </div>
                 </div>
             </div>
@@ -39,12 +39,12 @@
                             <th>Amount Due</th>
                         </tr>
                         <tr>
-                            <td>{{ sale.sale_number }}</td>
-                            <td>{{ exhibitor.division }}</td>
-                            <td>{{ animal.ear_tag_number }}</td>
-                            <td>{{ animal.weight }}</td>
-                            <td>{{ sale.sale_price }}</td>
-                            <td>{{ (animal.weight * sale.sale_price) |round(2) }}</td>
+                            <td>a</td>
+                            <td>b</td>
+                            <td>c</td>
+                            <td>d</td>
+                            <td>e</td>
+                            <td>f</td>
                         </tr>
                     </table>
 
@@ -159,7 +159,7 @@
                             </td>
                             <td/>
                             <td>
-                                <input type="text" placeholder="Ear Tag No." value="{{ animal.ear_tag_number }}" style="box-sizing: border-box;"/>
+                                <input type="text" placeholder="Ear Tag No." value="1" style="box-sizing: border-box;"/>
                             </td>
                         </tr>
                         <tr>
@@ -187,7 +187,7 @@
                         <input name="resaleCode" type="text" placeholder="Resale Code" style="width: 200px; margin-left: 27px;">
                         <br>
                         <label for="weight">Weight</label>
-                        <input  name="weight" type="text" placeholder="Weight" style="width: 200px; margin-left: 55px;" value="{{ animal.weight }}">
+                        <input  name="weight" type="text" placeholder="Weight" style="width: 200px; margin-left: 55px;">
                     </div>
                 </div>
             </div>
@@ -211,92 +211,56 @@
                                 <p>Buyer 1</p>
                             </td>
                             <td>
-                                <input type="text" style="width: 45px;" value="{{ buyer1.bidder_number }}">
+                                <input type="text" style="width: 45px;">
                             </td>
                             <td>
-                                <input type="text" style="width: 250px;" value="{{ buyer1.name }}">
+                                <input type="text" style="width: 250px;">
                             </td>
                             <td>
-                                <input type="text" style="width: 350px;" value="{{ buyer1.address }}">
+                                <input type="text" style="width: 350px;">
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <p>Buyer 2</p>
                             </td>
-                            {% if buyer2 %}
-                                <td>
-                                    <input type="text" style="width: 45px;" value="{{ buyer2.bidder_number }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;" value="{{ buyer2.name }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;" value="{{ buyer2.address }}">
-                                </td>
-                            {% else %}
-                                <td>
-                                    <input type="text" style="width: 45px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;">
-                                </td>
-                            {% endif %}
+                            <td>
+                                <input type="text" style="width: 45px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 250px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 350px;">
+                            </td>
                         </tr>
                         <tr>
                             <td>
                                 <p>Buyer 3</p>
                             </td>
-                            {% if buyer3 %}
-                                <td>
-                                    <input type="text" style="width: 45px;" value="{{ buyer3.bidder_number }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;" value="{{ buyer3.name }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;" value="{{ buyer3.address }}">
-                                </td>
-                            {% else %}
-                                <td>
-                                    <input type="text" style="width: 45px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;">
-                                </td>
-                            {% endif %}
+                            <td>
+                                <input type="text" style="width: 45px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 250px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 350px;">
+                            </td>
                         </tr>
                         <tr>
                             <td>
                                 <p>Buyer 4</p>
                             </td>
-                            {% if buyer4 %}
-                                <td>
-                                    <input type="text" style="width: 45px;" value="{{ buyer4.bidder_number }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;" value="{{ buyer4.name }}">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;" value="{{ buyer4.address }}">
-                                </td>
-                            {% else %}
-                                <td>
-                                    <input type="text" style="width: 45px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 250px;">
-                                </td>
-                                <td>
-                                    <input type="text" style="width: 350px;">
-                                </td>
-                            {% endif %}
+                            <td>
+                                <input type="text" style="width: 45px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 250px;">
+                            </td>
+                            <td>
+                                <input type="text" style="width: 350px;">
+                            </td>
                         </tr>
                     </table>
                     <input type="text" style="width: 100px; display: inline-block;" >

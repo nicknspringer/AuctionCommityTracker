@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import select
 from pandas import pandas as pd
 
 app = Flask(__name__)
@@ -39,7 +38,6 @@ class Animal(db.Model):
     weight = db.Column(db.Float, nullable=False)
     picture = db.Column(db.LargeBinary, nullable=True)
     exhibitor_id = db.Column(db.Integer, db.ForeignKey("exhibitor.id"), nullable=False)
-    sale_number = db.Column(db.Integer, nullable=False)
 
 
     exhibitor = db.relationship("Exhibitor", backref=db.backref("animals", lazy=True))
@@ -57,8 +55,6 @@ class Sale(db.Model):
     packer = db.Column(db.String(80), nullable=True)
     kill_plant = db.Column(db.String(80), nullable=True)
     sale_price = db.Column(db.Float, nullable=False)
-    is_processed = db.Column(db.Boolean, nullable=False)
-    sale_number = db.Column(db.Integer)
 
     animal = db.relationship("Animal", backref=db.backref("sales", lazy=True))
     buyer1 = db.relationship("Buyer", foreign_keys=[buyer_id_1], backref=db.backref("buyer1", lazy=True))
@@ -224,8 +220,7 @@ def sale_list():
         sale_price = request.form["price"]
         packer = request.form["packer"]
         kill_plant = request.form["kill_plant"]
-        is_processed = False
-        sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant, is_processed=is_processed)
+        sale = Sale(animal_id=animal_id, buyer_id_1=buyer_id_1, buyer_id_2=buyer_id_2, buyer_id_3=buyer_id_3, buyer_id_4=buyer_id_4, sale_price=sale_price, packer=packer, kill_plant=kill_plant)
         try:
             db.session.add(sale)
             db.session.commit()
@@ -369,7 +364,7 @@ def import_data(file_type):
                         exhibitor = Exhibitor(fName=fName, lName=lName, sale_number=saleOrder, division=division, division_placing=divisionPlacing, club=club_name)
                         db.session.add(exhibitor)
                         db.session.commit()
-                        animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id, species=species, sale_number=saleOrder)
+                        animal = Animal(ear_tag_number=tagNumber, weight=saleWeight, exhibitor_id=exhibitor.id, species=species)
                         db.session.add(animal)
                         db.session.commit()
                     except Exception as e:
@@ -386,39 +381,9 @@ def import_data(file_type):
     else:
         return render_template("importData.html")
 
-@app.route("/saleInvoice", methods=["GET"])
-def sale_invoice():
-    sales = Sale.query.order_by(Sale.is_processed, Sale.sale_number)
-    return render_template("saleInvoices.html", sales=sales)
-
-@app.route("/invoice/<int:sale_id>", methods=["POST", "GET"])
-def invoice(sale_id):
-    sale = Sale.query.get_or_404(sale_id)
-    if request.method == "POST":
-        pass
-    else:
-        animal = Animal.query.get_or_404(sale.animal_id)
-        exhibitor = Exhibitor.query.get_or_404(animal.exhibitor_id)
-        buyer1 = Buyer.query.get(sale.buyer_id_1)
-        buyer2 = Buyer.query.get(sale.buyer_id_2)
-        buyer3 = Buyer.query.get(sale.buyer_id_3)
-        buyer4 = Buyer.query.get(sale.buyer_id_4)
-        return render_template("invoice.html", sale=sale, animal=animal, exhibitor=exhibitor, buyer1=buyer1, buyer2=buyer2, buyer3=buyer3, buyer4=buyer4)
-
-@app.route("/block/<int:sale_number>")
-def block_screen(sale_number):
-    #exhibitor = select(Exhibitor).where(Exhibitor.sale_number == sale_number)
-    #animal = select(Animal).where(Animal.sale_number == exhibitor.sale_number)
-    exhibitors = Exhibitor.query.order_by(Exhibitor.sale_number).all()
-    exhibitor = exhibitors[sale_number-1]
-    animals = Animal.query.order_by(Animal.sale_number).all()
-    animal = animals[sale_number-1]
-    buyers = Buyer.query.order_by(Buyer.bidder_number).all()
-    return render_template("block.html", exhibitor=exhibitor, animal=animal, buyers=buyers)
-
 @app.route("/Invoice")
 def display_invoice():
-    return render_template("invoice_test.html")
+    return render_template("invoice.html")
 
 if __name__ == "__main__":
     with app.app_context():
