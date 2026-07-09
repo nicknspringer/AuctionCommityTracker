@@ -193,6 +193,37 @@ button {
         }
     }
 
+    .block_screen
+    {
+        .label_column
+        {
+            display:grid;
+            grid-template-columns: 7% 93%;
+
+            .seller_info
+            {
+                display:grid;
+                grid-template-columns: 30% 70%;
+                padding-right: 10px;
+                gap: 10px;
+            }
+
+            .buyer_info
+            {
+                display: grid;
+                grid-template-columns: 10% 90%;
+            }
+        }
+    }
+
+    .sale_invoices
+    {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        padding: 4px;
+        gap: 8px;
+    }
+
     .Invoice
     {
         background-color: $InvoiceBackgroundColor;

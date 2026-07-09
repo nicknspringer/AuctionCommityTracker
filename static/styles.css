@@ -137,6 +137,26 @@ body {
 .content .WipeDB:hover {
   background-color: #cc0000;
 }
+.content .block_screen .label_column {
+  display: grid;
+  grid-template-columns: 7% 93%;
+}
+.content .block_screen .label_column .seller_info {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  padding-right: 10px;
+  gap: 10px;
+}
+.content .block_screen .label_column .buyer_info {
+  display: grid;
+  grid-template-columns: 10% 90%;
+}
+.content .sale_invoices {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 4px;
+  gap: 8px;
+}
 .content .Invoice {
   background-color: #99cc99;
 }

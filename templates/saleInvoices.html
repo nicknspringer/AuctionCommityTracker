@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Sale Invoices</title>
+{% endblock %}
+
+
+{% block body %}
+    <h1>Sale Invoices</h1>
+    <div class="sale_invoices">
+        {% for sale in sales %}
+            <button>
+                <a href="/invoice/{{ sale.id }}">{{ sale.sale_number }}</a>
+            </button>
+        {% endfor %}
+    </div>
+{% endblock %}
