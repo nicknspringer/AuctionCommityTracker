@@ -16,6 +16,11 @@ $pageWidth: 800px;
 
 @media print
 {
+    @page
+    {
+        margin: 0;
+    }
+
     .nav, .printInstructions{
         display: none !important;
     }
